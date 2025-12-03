@@ -1,0 +1,487 @@
+[0;32m### System Status Report ###[0m
+Generated on: Sat Nov 22 00:00:01 UTC 2025
+
+[0;36m=================================================[0m
+[0;36mBitcoin Core (bitcoind) Sync Status[0m
+[0;36m=================================================[0m
+[0;32mStatus: Synced[0m (Block: 924635, Progress: 0.99999%)
+
+[0;36m=================================================[0m
+[0;36mElectrum Rust Server (electrs) Status[0m
+[0;36m=================================================[0m
+[0;32melectrs is active.[0m
+Database Size: 108G
+
+[0;36m=================================================[0m
+[0;36mMempool.space Backend Status[0m
+[0;36m=================================================[0m
+│ 0  │ mempool    │ default     │ 3.2.1   │ fork    │ 579132   │ 3D     │ 1    │ online    │ 0%       │ 388.6mb  │ bitcoin… │ disabled │
+
+[0;36m=================================================[0m
+[0;36mMempool.space Frontend Accessibility[0m
+[0;36m=================================================[0m
+[0;32mNginx is active.[0m
+[0;32mFrontend is accessible locally.[0m
+
+[0;36m=================================================[0m
+[0;36mSystem Resource Utilization[0m
+[0;36m=================================================[0m
+--- Disk Space (/dev/root) ---
+/dev/root       2.0T  936G  1.1T  48% /
+--- Memory ---
+Mem:           7.7Gi       3.3Gi       136Mi       4.1Mi       4.5Gi       4.4Gi
+
+[0;32m### Report Complete ###[0m
+
+[0;32m### System Status Report ###[0m
+Generated on: Sun Nov 23 00:00:01 UTC 2025
+
+[0;36m=================================================[0m
+[0;36mBitcoin Core (bitcoind) Sync Status[0m
+[0;36m=================================================[0m
+[0;32mStatus: Synced[0m (Block: 924778, Progress: 0.99999%)
+
+[0;36m=================================================[0m
+[0;36mElectrum Rust Server (electrs) Status[0m
+[0;36m=================================================[0m
+[0;32melectrs is active.[0m
+Database Size: 108G
+
+[0;36m=================================================[0m
+[0;36mMempool.space Backend Status[0m
+[0;36m=================================================[0m
+│ 0  │ mempool    │ default     │ 3.2.1   │ fork    │ 579132   │ 4D     │ 1    │ online    │ 0%       │ 410.2mb  │ bitcoin… │ disabled │
+
+[0;36m=================================================[0m
+[0;36mMempool.space Frontend Accessibility[0m
+[0;36m=================================================[0m
+[0;32mNginx is active.[0m
+[0;32mFrontend is accessible locally.[0m
+
+[0;36m=================================================[0m
+[0;36mSystem Resource Utilization[0m
+[0;36m=================================================[0m
+--- Disk Space (/dev/root) ---
+/dev/root       2.0T  936G  1.1T  48% /
+--- Memory ---
+Mem:           7.7Gi       3.1Gi       686Mi       4.0Mi       4.3Gi       4.6Gi
+
+[0;32m### Report Complete ###[0m
+
+[0;32m### System Status Report ###[0m
+Generated on: Mon Nov 24 00:00:01 UTC 2025
+
+[0;36m=================================================[0m
+[0;36mBitcoin Core (bitcoind) Sync Status[0m
+[0;36m=================================================[0m
+[0;32mStatus: Synced[0m (Block: 924920, Progress: 0.99999%)
+
+[0;36m=================================================[0m
+[0;36mElectrum Rust Server (electrs) Status[0m
+[0;36m=================================================[0m
+[0;32melectrs is active.[0m
+Database Size: 108G
+
+[0;36m=================================================[0m
+[0;36mMempool.space Backend Status[0m
+[0;36m=================================================[0m
+│ 0  │ mempool    │ default     │ 3.2.1   │ fork    │ 579132   │ 5D     │ 1    │ online    │ 0%       │ 423.8mb  │ bitcoin… │ disabled │
+
+[0;36m=================================================[0m
+[0;36mMempool.space Frontend Accessibility[0m
+[0;36m=================================================[0m
+[0;32mNginx is active.[0m
+[0;32mFrontend is accessible locally.[0m
+
+[0;36m=================================================[0m
+[0;36mSystem Resource Utilization[0m
+[0;36m=================================================[0m
+--- Disk Space (/dev/root) ---
+/dev/root       2.0T  937G  1.1T  48% /
+--- Memory ---
+Mem:           7.7Gi       3.1Gi       248Mi       4.0Mi       4.6Gi       4.6Gi
+
+[0;32m### Report Complete ###[0m
+
+CRITICAL: Bitcoin service is down.
+CRITICAL: Test alert.
+CRITICAL: Postfix is down.
+CRITICAL: Postfix is down (retry).
+CRITICAL: Postfix is down (directory test).
+CRITICAL: Postfix is down (final test).
+CRITICAL: Postfix is down (final logging test).
+CRITICAL: Postfix is down (logging test final).
+CRITICAL: Postfix is down (cron debug).
+CRITICAL: Postfix is down (absolute path test).
+CRITICAL: Postfix is down (final logging and path test).
+CRITICAL: Postfix service status check test.
+CRITICAL: Postfix is active test.
+[0;32m### System Status Report ###[0m
+Generated on: Tue Nov 25 00:00:01 UTC 2025
+
+[0;36m=================================================[0m
+[0;36mBitcoin Core (bitcoind) Sync Status[0m
+[0;36m=================================================[0m
+[0;32mStatus: Synced[0m (Block: 925063, Progress: 0.99999%)
+
+[0;36m=================================================[0m
+[0;36mElectrum Rust Server (electrs) Status[0m
+[0;36m=================================================[0m
+[0;32melectrs is active.[0m
+Database Size: 108G
+
+[0;36m=================================================[0m
+[0;36mMempool.space Backend Status[0m
+[0;36m=================================================[0m
+│ 0  │ mempool    │ default     │ 3.2.1   │ fork    │ 579132   │ 6D     │ 1    │ online    │ 0%       │ 383.8mb  │ bitcoin… │ disabled │
+
+[0;36m=================================================[0m
+[0;36mMempool.space Frontend Accessibility[0m
+[0;36m=================================================[0m
+[0;32mNginx is active.[0m
+[0;32mFrontend is accessible locally.[0m
+
+[0;36m=================================================[0m
+[0;36mSystem Resource Utilization[0m
+[0;36m=================================================[0m
+--- Disk Space (/dev/root) ---
+/dev/root       2.0T  937G  1.1T  48% /
+--- Memory ---
+Mem:           7.7Gi       3.7Gi       496Mi       4.0Mi       3.8Gi       4.0Gi
+
+[0;32m### Report Complete ###[0m
+
+CRITICAL: Email alert test from verification.
+CRITICAL: Email alert test after password update.
+[0;32m### System Status Report ###[0m
+Generated on: Wed Nov 26 00:00:01 UTC 2025
+
+[0;36m=================================================[0m
+[0;36mBitcoin Core (bitcoind) Sync Status[0m
+[0;36m=================================================[0m
+[0;32mStatus: Synced[0m (Block: 925178, Progress: 0.99999%)
+
+[0;36m=================================================[0m
+[0;36mElectrum Rust Server (electrs) Status[0m
+[0;36m=================================================[0m
+[0;32melectrs is active.[0m
+Database Size: 108G
+
+[0;36m=================================================[0m
+[0;36mMempool.space Backend Status[0m
+[0;36m=================================================[0m
+│ 0  │ mempool    │ default     │ 3.2.1   │ fork    │ 579132   │ 7D     │ 1    │ online    │ 0%       │ 454.6mb  │ bitcoin… │ disabled │
+
+[0;36m=================================================[0m
+[0;36mMempool.space Frontend Accessibility[0m
+[0;36m=================================================[0m
+[0;32mNginx is active.[0m
+[0;32mFrontend is accessible locally.[0m
+
+[0;36m=================================================[0m
+[0;36mSystem Resource Utilization[0m
+[0;36m=================================================[0m
+--- Disk Space (/dev/root) ---
+/dev/root       2.0T  937G  1.1T  48% /
+--- Memory ---
+Mem:           7.7Gi       3.1Gi       388Mi       4.0Mi       4.5Gi       4.6Gi
+
+[0;32m### Report Complete ###[0m
+
+[0;32m### System Status Report ###[0m
+Generated on: Thu Nov 27 00:00:01 UTC 2025
+
+[0;36m=================================================[0m
+[0;36mBitcoin Core (bitcoind) Sync Status[0m
+[0;36m=================================================[0m
+[0;32mStatus: Synced[0m (Block: 925342, Progress: 0.99999%)
+
+[0;36m=================================================[0m
+[0;36mElectrum Rust Server (electrs) Status[0m
+[0;36m=================================================[0m
+[0;32melectrs is active.[0m
+Database Size: 108G
+
+[0;36m=================================================[0m
+[0;36mMempool.space Backend Status[0m
+[0;36m=================================================[0m
+│ 0  │ mempool    │ default     │ 3.2.1   │ fork    │ 579132   │ 8D     │ 1    │ online    │ 0%       │ 463.4mb  │ bitcoin… │ disabled │
+
+[0;36m=================================================[0m
+[0;36mMempool.space Frontend Accessibility[0m
+[0;36m=================================================[0m
+[0;32mNginx is active.[0m
+[0;32mFrontend is accessible locally.[0m
+
+[0;36m=================================================[0m
+[0;36mSystem Resource Utilization[0m
+[0;36m=================================================[0m
+--- Disk Space (/dev/root) ---
+/dev/root       2.0T  938G  1.1T  48% /
+--- Memory ---
+Mem:           7.7Gi       3.1Gi       230Mi       4.0Mi       4.7Gi       4.6Gi
+
+[0;32m### Report Complete ###[0m
+
+2025-11-27 19:44:26 UTC: Daily health report email sent to artasheskocharyan@gmail.com.
+2025-11-27 19:46:52 UTC: Daily health report email sent to artasheskocharyan@gmail.com.
+2025-11-27 19:49:17 UTC: Daily health report email sent to artasheskocharyan@gmail.com.
+2025-11-27 19:49:47 UTC: Daily health report email sent to artasheskocharyan@gmail.com.
+2025-11-27 20:40:07 UTC: Daily health report email sent to artasheskocharyan@gmail.com.
+2025-11-27 20:41:13 UTC: Daily health report email sent to artasheskocharyan@gmail.com.
+2025-11-27 20:43:05 UTC: Daily health report email sent to artasheskocharyan@gmail.com.
+2025-11-27 20:43:32 UTC: Daily health report email sent to artasheskocharyan@gmail.com.
+2025-11-27 21:04:36 UTC: Daily health report email sent to artasheskocharyan@gmail.com.
+2025-11-27 21:07:17 UTC: Daily health report email sent to artasheskocharyan@gmail.com.
+2025-11-27 21:08:48 UTC: Daily health report email sent to artasheskocharyan@gmail.com.
+2025-11-27 21:37:04 UTC: Daily health report email sent to artasheskocharyan@gmail.com.
+2025-11-27 21:47:24 UTC: Daily health report email sent to artasheskocharyan@gmail.com.
+2025-11-27 22:03:26 UTC: Daily health report email sent to artasheskocharyan@gmail.com.
+2025-11-27 22:15:33 UTC: Daily health report email sent to artasheskocharyan@gmail.com.
+2025-11-27 22:27:19 UTC: Daily health report email sent to artasheskocharyan@gmail.com.
+[0;32m### System Status Report ###[0m
+Generated on: Fri Nov 28 00:00:01 UTC 2025
+
+[0;36m=================================================[0m
+[0;36mBitcoin Core (bitcoind) Status[0m
+[0;36m=================================================[0m
+Sync Status: [0;32mSynced[0m
+Block Height: 925485
+Peer Connections: 89
+
+[0;36m=================================================[0m
+[0;36mElectrum Rust Server (electrs) Status[0m
+[0;36m=================================================[0m
+Service Status: [0;32mactive[0m
+Database Size: 108G
+
+[0;36m=================================================[0m
+[0;36mMempool.space Backend Status[0m
+[0;36m=================================================[0m
+│ 0  │ mempool    │ default     │ 3.2.1   │ fork    │ 579132   │ 9D     │ 1    │ online    │ 0%       │ 453.2mb  │ bitcoin… │ disabled │
+Mempool Size: 1625 transactions
+
+[0;36m=================================================[0m
+[0;36mMempool.space Frontend Accessibility[0m
+[0;36m=================================================[0m
+Nginx Status: [0;32mactive[0m
+Frontend Status: [0;32mAccessible[0m
+
+[0;36m=================================================[0m
+[0;36mSystem Resource Utilization[0m
+[0;36m=================================================[0m
+Disk Usage: 48%
+Memory: Total:7.7Gi Used:3.4Gi
+DEBUG: LOAD_AVG_1MIN=0.84
+DEBUG: NUM_CORES=2
+CPU Load: 42.00%
+
+[0;32m### Report Complete ###[0m
+
+2025-11-28 16:00:02 UTC: Daily health report email sent to artasheskocharyan@gmail.com.
+[0;32m### System Status Report ###[0m
+Generated on: Sat Nov 29 00:00:01 UTC 2025
+
+[0;36m=================================================[0m
+[0;36mBitcoin Core (bitcoind) Status[0m
+[0;36m=================================================[0m
+Sync Status: [0;32mSynced[0m
+Block Height: 925635
+Peer Connections: 89
+
+[0;36m=================================================[0m
+[0;36mElectrum Rust Server (electrs) Status[0m
+[0;36m=================================================[0m
+Service Status: [0;32mactive[0m
+Database Size: 108G
+
+[0;36m=================================================[0m
+[0;36mMempool.space Backend Status[0m
+[0;36m=================================================[0m
+│ 0  │ mempool    │ default     │ 3.2.1   │ fork    │ 579132   │ 10D    │ 1    │ online    │ 0%       │ 476.7mb  │ bitcoin… │ disabled │
+Mempool Size: 1897 transactions
+
+[0;36m=================================================[0m
+[0;36mMempool.space Frontend Accessibility[0m
+[0;36m=================================================[0m
+Nginx Status: [0;32mactive[0m
+Frontend Status: [0;32mAccessible[0m
+
+[0;36m=================================================[0m
+[0;36mSystem Resource Utilization[0m
+[0;36m=================================================[0m
+Disk Usage: 48%
+Memory: Total:7.7Gi Used:3.3Gi
+DEBUG: LOAD_AVG_1MIN=0.68
+DEBUG: NUM_CORES=2
+CPU Load: 34.00%
+
+[0;32m### Report Complete ###[0m
+
+2025-11-29 16:00:09 UTC: Daily health report email sent to artasheskocharyan@gmail.com.
+2025-11-29 22:58:32 UTC: Daily health report email sent to artasheskocharyan@gmail.com.
+[0;32m### System Status Report ###[0m
+Generated on: Sun Nov 30 00:00:01 UTC 2025
+
+[0;36m=================================================[0m
+[0;36mBitcoin Core (bitcoind) Status[0m
+[0;36m=================================================[0m
+Sync Status: [0;32mSynced[0m
+Block Height: 925772
+Peer Connections: 101
+
+[0;36m=================================================[0m
+[0;36mElectrum Rust Server (electrs) Status[0m
+[0;36m=================================================[0m
+Service Status: [0;32mactive[0m
+Database Size: 108G
+
+[0;36m=================================================[0m
+[0;36mMempool.space Backend Status[0m
+[0;36m=================================================[0m
+│ 0  │ mempool    │ default     │ 3.2.1   │ fork    │ 579132   │ 11D    │ 1    │ online    │ 50%      │ 458.0mb  │ bitcoin… │ disabled │
+Mempool Size: 1546 transactions
+
+[0;36m=================================================[0m
+[0;36mMempool.space Frontend Accessibility[0m
+[0;36m=================================================[0m
+Nginx Status: [0;32mactive[0m
+Frontend Status: [0;32mAccessible[0m
+
+[0;36m=================================================[0m
+[0;36mSystem Resource Utilization[0m
+[0;36m=================================================[0m
+Disk Usage: 48%
+Memory: Total:7.7Gi Used:3.7Gi
+DEBUG: LOAD_AVG_1MIN=0.04
+DEBUG: NUM_CORES=2
+CPU Load: 2.00%
+
+[0;32m### Report Complete ###[0m
+
+2025-11-30 16:00:10 UTC: Daily health report email sent to artasheskocharyan@gmail.com.
+[0;32m### System Status Report ###[0m
+Generated on: Mon Dec  1 00:00:01 UTC 2025
+
+[0;36m=================================================[0m
+[0;36mBitcoin Core (bitcoind) Status[0m
+[0;36m=================================================[0m
+Sync Status: [0;32mSynced[0m
+Block Height: 925939
+Peer Connections: 95
+
+[0;36m=================================================[0m
+[0;36mElectrum Rust Server (electrs) Status[0m
+[0;36m=================================================[0m
+Service Status: [0;32mactive[0m
+Database Size: 108G
+
+[0;36m=================================================[0m
+[0;36mMempool.space Backend Status[0m
+[0;36m=================================================[0m
+│ 0  │ mempool    │ default     │ 3.2.1   │ fork    │ 579132   │ 12D    │ 1    │ online    │ 0%       │ 475.8mb  │ bitcoin… │ disabled │
+Mempool Size: 1798 transactions
+
+[0;36m=================================================[0m
+[0;36mMempool.space Frontend Accessibility[0m
+[0;36m=================================================[0m
+Nginx Status: [0;32mactive[0m
+Frontend Status: [0;32mAccessible[0m
+
+[0;36m=================================================[0m
+[0;36mSystem Resource Utilization[0m
+[0;36m=================================================[0m
+Disk Usage: 48%
+Memory: Total:7.7Gi Used:3.4Gi
+DEBUG: LOAD_AVG_1MIN=0.50
+DEBUG: NUM_CORES=2
+CPU Load: 25.00%
+
+[0;32m### Report Complete ###[0m
+
+2025-12-01 16:00:02 UTC: Daily health report email sent to artasheskocharyan@gmail.com.
+[0;32m### System Status Report ###[0m
+Generated on: Tue Dec  2 00:00:01 UTC 2025
+
+[0;36m=================================================[0m
+[0;36mBitcoin Core (bitcoind) Status[0m
+[0;36m=================================================[0m
+Sync Status: [0;32mSynced[0m
+Block Height: 926072
+Peer Connections: 94
+
+[0;36m=================================================[0m
+[0;36mElectrum Rust Server (electrs) Status[0m
+[0;36m=================================================[0m
+Service Status: [0;32mactive[0m
+Database Size: 108G
+
+[0;36m=================================================[0m
+[0;36mMempool.space Backend Status[0m
+[0;36m=================================================[0m
+│ 0  │ mempool    │ default     │ 3.2.1   │ fork    │ 579132   │ 13D    │ 1    │ online    │ 0%       │ 543.3mb  │ bitcoin… │ disabled │
+Mempool Size: 599 transactions
+
+[0;36m=================================================[0m
+[0;36mMempool.space Frontend Accessibility[0m
+[0;36m=================================================[0m
+Nginx Status: [0;32mactive[0m
+Frontend Status: [0;32mAccessible[0m
+
+[0;36m=================================================[0m
+[0;36mSystem Resource Utilization[0m
+[0;36m=================================================[0m
+Disk Usage: 48%
+Memory: Total:7.7Gi Used:3.5Gi
+DEBUG: LOAD_AVG_1MIN=0.30
+DEBUG: NUM_CORES=2
+CPU Load: 15.00%
+
+[0;32m### Report Complete ###[0m
+
+2025-12-02 01:26:05 UTC [send_health_report_v2.sh] [INFO] Generating raw system health report.
+2025-12-02 01:26:05 UTC [send_health_report_v2.sh] [INFO] Parsing system health report data.
+2025-12-02 01:38:43 UTC [send_health_report_v2.sh] [INFO] Generating raw system health report.
+2025-12-02 01:38:43 UTC [send_health_report_v2.sh] [INFO] Parsing system health report data.
+2025-12-02 01:38:43 UTC [send_health_report_v2.sh] [INFO] Sending daily health report email to artasheskocharyan@gmail.com.
+2025-12-02 16:00:01 UTC [send_health_report_v2.sh] [INFO] Generating raw system health report.
+2025-12-02 16:00:17 UTC [send_health_report_v2.sh] [INFO] Parsing system health report data.
+2025-12-02 16:00:17 UTC [send_health_report_v2.sh] [INFO] Sending daily health report email to artasheskocharyan@gmail.com.
+2025-12-03 00:00:01 UTC [system_health_report.sh] [INFO] ### System Status Report ###
+2025-12-03 00:00:01 UTC [system_health_report.sh] [INFO] Generated on: Wed Dec  3 00:00:01 UTC 2025
+
+[0;36m=================================================[0m
+[0;36mBitcoin Core (bitcoind) Status[0m
+[0;36m=================================================[0m
+Sync Status: [0;32mSynced[0m
+Block Height: 926199
+Peer Connections: 99
+
+[0;36m=================================================[0m
+[0;36mElectrum Rust Server (electrs) Status[0m
+[0;36m=================================================[0m
+Service Status: [0;32mactive[0m
+Database Size: 108G
+
+[0;36m=================================================[0m
+[0;36mMempool.space Backend Status[0m
+[0;36m=================================================[0m
+Backend Status: [0;32monline[0m
+Mempool Size: 4252 transactions
+
+[0;36m=================================================[0m
+[0;36mMempool.space Frontend Accessibility[0m
+[0;36m=================================================[0m
+Nginx Status: [0;32mactive[0m
+Frontend Status: [0;32mAccessible[0m
+
+[0;36m=================================================[0m
+[0;36mSystem Resource Utilization[0m
+[0;36m=================================================[0m
+Disk Usage: 48%
+Memory: Total:7.7Gi Used:3.6Gi
+CPU Load: 32.00%
+2025-12-03 00:00:02 UTC [system_health_report.sh] [INFO] ### Report Complete ###
+2025-12-03 16:00:01 UTC [send_health_report_v2.sh] [INFO] Generating raw system health report.
+2025-12-03 16:00:02 UTC [send_health_report_v2.sh] [INFO] Parsing system health report data.
+2025-12-03 16:00:02 UTC [send_health_report_v2.sh] [INFO] Sending daily health report email to artasheskocharyan@gmail.com.

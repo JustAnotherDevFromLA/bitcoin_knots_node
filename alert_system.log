@@ -1,0 +1,36 @@
+2025-11-24 23:49:01 Critical error found in /home/bitcoin_knots_node/bitcoin_node_helper/system_health_report.log.
+2025-11-24 23:49:01 Failed to send email notification: Postfix service is not active.
+2025-11-24 23:50:01 Critical error found in /home/bitcoin_knots_node/bitcoin_node_helper/system_health_report.log.
+2025-11-24 23:50:01 Failed to send email notification: Postfix service is not active.
+2025-11-24 23:51:01 Critical error found in /home/bitcoin_knots_node/bitcoin_node_helper/system_health_report.log.
+2025-11-24 23:51:01 Failed to send email notification: Postfix service is not active.
+2025-11-24 23:52:01 Critical error found in /home/bitcoin_knots_node/bitcoin_node_helper/system_health_report.log.
+2025-11-24 23:52:01 Failed to send email notification: Postfix service is not active.
+2025-11-24 23:53:01 Critical error found in /home/bitcoin_knots_node/bitcoin_node_helper/system_health_report.log.
+2025-11-24 23:53:01 Failed to send email notification: Postfix service is not active.
+2025-11-24 23:54:02 Critical error found in /home/bitcoin_knots_node/bitcoin_node_helper/system_health_report.log.
+2025-11-24 23:54:02 Failed to send email notification: Postfix service is not active.
+2025-11-24 23:55:01 Critical error found in /home/bitcoin_knots_node/bitcoin_node_helper/system_health_report.log.
+2025-11-24 23:55:01 Failed to send email notification: Postfix service is not active.
+2025-11-24 23:56:01 Critical error found in /home/bitcoin_knots_node/bitcoin_node_helper/system_health_report.log.
+2025-11-24 23:56:01 Failed to send email notification: Postfix service is not active.
+2025-11-24 23:57:01 Critical error found in /home/bitcoin_knots_node/bitcoin_node_helper/system_health_report.log.
+2025-11-24 23:57:01 Failed to send email notification: Postfix service is not active.
+2025-11-24 23:58:01 Critical error found in /home/bitcoin_knots_node/bitcoin_node_helper/system_health_report.log.
+2025-11-24 23:58:01 Failed to send email notification: Postfix service is not active.
+2025-11-24 23:59:01 Critical error found in /home/bitcoin_knots_node/bitcoin_node_helper/system_health_report.log.
+2025-11-24 23:59:01 Failed to send email notification: Postfix service is not active.
+2025-11-25 00:00:01 Critical error found in /home/bitcoin_knots_node/bitcoin_node_helper/system_health_report.log.
+2025-11-25 00:00:01 Postfix service is active. Attempting to send email notification.
+2025-11-25 00:00:01 Email notification sent successfully.
+2025-11-25 00:00:01 Critical error found in /home/bitcoin_knots_node/bitcoin_node_helper/system_health_report.log.
+2025-11-25 00:00:01 Postfix service is active. Attempting to send email notification.
+2025-11-25 00:00:01 Email notification sent successfully.
+2025-11-25 00:20:01 Critical error found in /home/bitcoin_knots_node/bitcoin_node_helper/system_health_report.log.
+2025-11-25 00:20:01 Postfix service is active. Attempting to send email notification.
+2025-11-25 00:20:01 Email notification sent successfully.
+2025-11-25 00:25:01 Critical error found in /home/bitcoin_knots_node/bitcoin_node_helper/system_health_report.log.
+2025-11-25 00:25:01 Postfix service is active. Attempting to send email notification.
+2025-11-25 00:25:01 Email notification sent successfully.
+2025-12-02 02:03:18 UTC [test_notification_scripts.sh] [INFO] Starting automated script integrity tests.
+2025-12-02 02:03:18 UTC [test_notification_scripts.sh] [INFO] Running test: system_health_report.sh execution

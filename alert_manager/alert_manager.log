@@ -1,0 +1,52 @@
+[2025-11-29 20:02:57] [INFO] Alert Manager started.
+[2025-11-29 20:02:57] [INFO] Running self-tests...
+[2025-11-29 20:02:57] [INFO] Testing configuration parsing...
+[2025-11-29 20:02:57] [INFO] Parsed email.recipient_email: your_email@example.com
+[2025-11-29 20:02:57] [INFO] Checking for required command-line tools...
+[2025-11-29 20:02:57] [INFO] All required tools are present.
+[2025-11-29 20:02:57] [INFO] Sending a test email notification...
+[2025-11-29 20:02:57] [INFO] Sending email to your_email@example.com with subject: [Bitcoin Node Alert] Test Alert
+[2025-11-29 20:02:57] [INFO] Email notification sent successfully.
+[2025-11-29 20:02:57] [INFO] Self-tests finished.
+[2025-11-29 20:02:57] [INFO] Alert Manager finished.
+[2025-11-29 20:03:08] [INFO] Alert Manager started.
+[2025-11-29 20:03:08] [INFO] Generating and sending daily health report...
+[2025-11-29 20:03:09] [INFO] Sending email to your_email@example.com with subject: [Bitcoin Node Alert] Daily System Health Report
+[2025-11-29 20:03:09] [INFO] Email notification sent successfully.
+[2025-11-29 20:03:09] [INFO] Alert Manager finished.
+[2025-11-29 20:10:54] [INFO] Alert Manager started.
+[2025-11-29 20:10:54] [INFO] Running self-tests...
+[2025-11-29 20:10:54] [INFO] Testing configuration parsing...
+[2025-11-29 20:10:54] [INFO] Parsed email.recipient_email: artasheskocharyan@gmail.com
+[2025-11-29 20:10:54] [INFO] Checking for required command-line tools...
+[2025-11-29 20:10:54] [INFO] All required tools are present.
+[2025-11-29 20:10:54] [INFO] Sending a test email notification...
+[2025-11-29 20:10:54] [INFO] Sending email to artasheskocharyan@gmail.com with subject: [Bitcoin Node Alert] Test Alert
+[2025-11-29 20:10:54] [INFO] Email notification sent successfully.
+[2025-11-29 20:10:54] [INFO] Self-tests finished.
+[2025-11-29 20:10:54] [INFO] Alert Manager finished.
+[2025-11-29 20:11:03] [INFO] Alert Manager started.
+[2025-11-29 20:11:03] [INFO] Generating and sending daily health report...
+[2025-11-29 20:11:03] [INFO] Sending email to artasheskocharyan@gmail.com with subject: [Bitcoin Node Alert] Daily System Health Report
+[2025-11-29 20:11:03] [INFO] Email notification sent successfully.
+[2025-11-29 20:11:03] [INFO] Alert Manager finished.
+[2025-11-29 20:15:46] [INFO] Alert Manager started.
+[2025-11-29 20:15:46] [INFO] Generating and sending daily health report...
+[2025-11-29 20:15:47] [INFO] Sending email to artasheskocharyan@gmail.com with subject: [Bitcoin Node Alert] Daily System Health Report
+[2025-11-29 20:15:47] [INFO] Email notification sent successfully.
+[2025-11-29 20:15:47] [INFO] Alert Manager finished.
+[2025-11-29 20:47:01] [INFO] Alert Manager started.
+[2025-11-29 20:47:01] [INFO] Generating and sending daily health report...
+[2025-11-29 20:47:02] [INFO] Sending email to artasheskocharyan@gmail.com with subject: [Bitcoin Node Alert] Daily System Health Report
+[2025-11-29 20:47:02] [INFO] Email notification sent successfully.
+[2025-11-29 20:47:02] [INFO] Alert Manager finished.
+[2025-11-29 20:52:16] [INFO] Alert Manager started.
+[2025-11-29 20:52:16] [INFO] Generating and sending daily health report...
+[2025-11-29 20:52:17] [INFO] Sending email to artasheskocharyan@gmail.com with subject: [Bitcoin Node Alert] Daily System Health Report
+[2025-11-29 20:52:17] [INFO] Email notification sent successfully.
+[2025-11-29 20:52:17] [INFO] Alert Manager finished.
+[2025-11-29 21:38:52] [INFO] Alert Manager started.
+[2025-11-29 21:38:52] [INFO] Generating and sending daily health report...
+[2025-11-29 21:38:52] [INFO] Sending email to artasheskocharyan@gmail.com with subject: [Bitcoin Node Alert] Daily System Health Report
+[2025-11-29 21:38:52] [INFO] Email notification sent successfully.
+[2025-11-29 21:38:52] [INFO] Alert Manager finished.

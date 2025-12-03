@@ -1,0 +1,50 @@
+#------------------------------------------------------------------------------
+# ALERT MANAGER CONFIGURATION
+#------------------------------------------------------------------------------
+
+# -- General Settings ----------------------------------------------------------
+# Log file for the alert manager itself
+log_file: "/home/bitcoin_knots_node/bitcoin_node_helper/alert_manager/alert_manager.log"
+
+# -- Notification Settings -----------------------------------------------------
+# Master switch to enable/disable all notifications
+notifications_enabled: true
+
+# -- Email Channel -------------------------------------------------------------
+email:
+  enabled: true
+  recipient_email: "artasheskocharyan@gmail.com"
+  subject_prefix: "[Bitcoin Node Alert]"
+  # See https://www.postfix.org/smtp-auth-readme.html for configuring Postfix with Gmail SMTP
+  # To test sending emails use: echo "Test body" | mail -s "Test Subject" your_email@example.com
+  # Ensure mailutils is installed: sudo apt-get install mailutils
+
+# -- Services to Monitor -------------------------------------------------------
+services:
+  - name: "bitcoind"
+    critical: true
+  - name: "electrs"
+    critical: true
+  - name: "mempool" # This is the pm2 process name
+    critical: false
+
+# -- Health Check Thresholds ---------------------------------------------------
+# These values are checked by the system_health_report.sh script.
+# The alert manager will parse the output and trigger alerts based on these.
+thresholds:
+  # Trigger a WARNING if disk usage exceeds this percentage
+  disk_usage_warn_percent: 85
+  # Trigger a CRITICAL alert if disk usage exceeds this percentage
+  disk_usage_critical_percent: 95
+
+  # Trigger a WARNING if memory usage exceeds this percentage
+  mem_usage_warn_percent: 90
+
+  # Trigger a WARNING if CPU load (1-minute average) exceeds this value
+  cpu_load_warn: 1.5
+
+# -- Advanced Settings -------------------------------------------------------
+# File to store the line number of the last processed log entry
+# This helps prevent duplicate alerts from being sent.
+last_processed_log_entry_file: "/home/bitcoin_knots_node/bitcoin_node_helper/alert_manager/last_processed_log.txt"
+health_report_log_file: "/home/bitcoin_knots_node/bitcoin_node_helper/system_health_report.log"
