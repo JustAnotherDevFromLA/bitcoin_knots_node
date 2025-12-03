@@ -3,6 +3,27 @@
 # Define script name for logging
 SCRIPT_NAME="send_health_report_v2.sh"
 
+source "$(dirname "$0")/lib/utils.sh"
+
+# --- Command and Script Checks ---
+REQUIRED_COMMANDS=("jq" "sendmail" "systemctl")
+for cmd in "${REQUIRED_COMMANDS[@]}"; do
+    if ! command -v "$cmd" &> /dev/null; then
+        log_message "CRITICAL" "Required command not found: $cmd. Exiting." "${SCRIPT_NAME}" >&2
+        exit 1
+    fi
+done
+
+HEALTH_REPORT_SCRIPT="/home/bitcoin_knots_node/bitcoin_node_helper/system_health_report.sh"
+if [ ! -f "$HEALTH_REPORT_SCRIPT" ]; then
+    log_message "CRITICAL" "Health report script not found: $HEALTH_REPORT_SCRIPT. Exiting." "${SCRIPT_NAME}" >&2
+    exit 1
+fi
+if [ ! -x "$HEALTH_REPORT_SCRIPT" ]; then
+    log_message "CRITICAL" "Health report script is not executable: $HEALTH_REPORT_SCRIPT. Exiting." "${SCRIPT_NAME}" >&2
+    exit 1
+fi
+
 # Define log file and recipient
 LOG_FILE="/home/bitcoin_knots_node/bitcoin_node_helper/system_health_report.log"
 RECIPIENT="artasheskocharyan@gmail.com"
@@ -11,40 +32,32 @@ SUBJECT="Daily Bitcoin Node Health Report"
 # Ensure the log file exists
 touch "$LOG_FILE"
 
-# --- Helper Functions ---
-# Standardized logging function
-log_message() {
-    local LEVEL="$1"
-    local MESSAGE="$2"
-    echo -e "$(date +"%Y-%m-%d %H:%M:%S %Z") [${SCRIPT_NAME}] [${LEVEL}] ${MESSAGE}" >> "$LOG_FILE"
-}
-
 # --- 1. Get and Clean Report Data ---
-log_message "INFO" "Generating raw system health report."
+log_message "INFO" "Generating raw system health report." "${SCRIPT_NAME}" >> "$LOG_FILE"
 REPORT_CONTENT=$(/home/bitcoin_knots_node/bitcoin_node_helper/system_health_report.sh)
 CURRENT_TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S %Z")
-CLEAN_REPORT_CONTENT=$(echo "$REPORT_CONTENT" | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g")
 
 # --- 2. Parse Report into Variables ---
-log_message "INFO" "Parsing system health report data."
-BITCOIND_SYNC_STATUS=$(echo "$CLEAN_REPORT_CONTENT" | awk -F': ' '/Sync Status:/ {print $2}')
-BITCOIND_BLOCK_HEIGHT=$(echo "$CLEAN_REPORT_CONTENT" | awk -F': ' '/Block Height:/ {print $2}')
-BITCOIND_PEERS=$(echo "$CLEAN_REPORT_CONTENT" | awk -F': ' '/Peer Connections:/ {print $2}')
+log_message "INFO" "Parsing system health report data." "${SCRIPT_NAME}" >> "$LOG_FILE"
 
-ELECTRS_STATUS=$(echo "$CLEAN_REPORT_CONTENT" | awk -F': ' '/Service Status:/ {print $2}')
-ELECTRS_DB_SIZE=$(echo "$CLEAN_REPORT_CONTENT" | awk -F': ' '/Database Size:/ {print $2}')
+# Parse JSON report into variables using jq
+BITCOIND_SYNC_STATUS=$(echo "$REPORT_CONTENT" | jq -r '.bitcoin_core_status')
+BITCOIND_BLOCK_HEIGHT=$(echo "$REPORT_CONTENT" | jq -r '.bitcoin_core_block_height')
+BITCOIND_PEERS=$(echo "$REPORT_CONTENT" | jq -r '.bitcoin_core_peer_connections')
 
-MEMPOOL_BACKEND_STATUS=$(echo "$CLEAN_REPORT_CONTENT" | awk -F': ' '/Backend Status:/ {print $2}')
-MEMPOOL_SIZE=$(echo "$CLEAN_REPORT_CONTENT" | awk -F': ' '/Mempool Size:/ {print $2}')
+ELECTRS_STATUS=$(echo "$REPORT_CONTENT" | jq -r '.electrs_service_status')
+ELECTRS_DB_SIZE=$(echo "$REPORT_CONTENT" | jq -r '.electrs_db_size')
 
-NGINX_STATUS=$(echo "$CLEAN_REPORT_CONTENT" | awk -F': ' '/Nginx Status:/ {print $2}')
-FRONTEND_STATUS=$(echo "$CLEAN_REPORT_CONTENT" | awk -F': ' '/Frontend Status:/ {print $2}')
+MEMPOOL_BACKEND_STATUS=$(echo "$REPORT_CONTENT" | jq -r '.mempool_backend_status')
+MEMPOOL_SIZE=$(echo "$REPORT_CONTENT" | jq -r '.mempool_size_transactions')
 
-DISK_USAGE=$(echo "$CLEAN_REPORT_CONTENT" | awk -F': ' '/Disk Usage:/ {print $2}')
-MEM_RAW=$(echo "$CLEAN_REPORT_CONTENT" | awk -F': ' '/Memory:/ {print $2}')
-MEM_TOTAL=$(echo "$MEM_RAW" | awk -F'Used:' '{print $1}' | sed 's/Total://')
-MEM_USED=$(echo "$MEM_RAW" | awk -F'Used:' '{print $2}')
-CPU_LOAD=$(echo "$CLEAN_REPORT_CONTENT" | awk -F': ' '/CPU Load:/ {print $2}')
+NGINX_STATUS=$(echo "$REPORT_CONTENT" | jq -r '.nginx_status')
+FRONTEND_STATUS=$(echo "$REPORT_CONTENT" | jq -r '.frontend_status')
+
+DISK_USAGE=$(echo "$REPORT_CONTENT" | jq -r '.disk_usage')
+MEM_TOTAL=$(echo "$REPORT_CONTENT" | jq -r '.memory_total')
+MEM_USED=$(echo "$REPORT_CONTENT" | jq -r '.memory_used')
+CPU_LOAD=$(echo "$REPORT_CONTENT" | jq -r '.cpu_load')
 
 # --- 3. Define Status Coloring Logic ---
 get_status_color() {
@@ -132,7 +145,7 @@ EOF
 )
 
 # --- 5. Prepare and Send Email ---
-log_message "INFO" "Sending daily health report email to $RECIPIENT."
+log_message "INFO" "Sending daily health report email to $RECIPIENT." "${SCRIPT_NAME}" >> "$LOG_FILE"
 (
     echo "To: $RECIPIENT"
     echo "Subject: $SUBJECT"
@@ -144,8 +157,6 @@ log_message "INFO" "Sending daily health report email to $RECIPIENT."
 
 # Check Postfix status
 if ! systemctl is-active --quiet postfix; then
-    log_message "WARNING" "Postfix service is not running. Email delivery may be affected."
+    log_message "WARNING" "Postfix service is not running. Email delivery may be affected." "${SCRIPT_NAME}" >> "$LOG_FILE"
 fi
 
-# Rotate log file (this will now happen inside system_health_report.sh as well, but good to keep here for consistency)
-tail -n 1000 "$LOG_FILE" > "$LOG_FILE.tmp" && mv "$LOG_FILE.tmp" "$LOG_FILE"

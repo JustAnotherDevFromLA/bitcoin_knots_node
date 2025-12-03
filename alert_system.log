@@ -34,3 +34,8 @@
 2025-11-25 00:25:01 Email notification sent successfully.
 2025-12-02 02:03:18 UTC [test_notification_scripts.sh] [INFO] Starting automated script integrity tests.
 2025-12-02 02:03:18 UTC [test_notification_scripts.sh] [INFO] Running test: system_health_report.sh execution
+2025-12-03 22:53:39 UTC [send_alert.sh] [INFO] Monitoring /home/bitcoin_knots_node/bitcoin_node_helper/system_health_report.log for new critical alerts starting from line 156.
+2025-12-03 22:53:39 UTC [send_alert.sh] [CRITICAL] Critical error found in /home/bitcoin_knots_node/bitcoin_node_helper/system_health_report.log: 2025-12-03 22:25:30 UTC [test_injection] [CRITICAL] This is a test critical alert injected by Gemini.
+2025-12-03 22:53:39 UTC [send_alert.sh] [INFO] Postfix service is active. Attempting to send email notification.
+2025-12-03 22:53:39 UTC [send_alert.sh] [INFO] Email notification sent successfully to artasheskocharyan@gmail.com.
+2025-12-03 22:53:39 UTC [send_alert.sh] [INFO] Finished monitoring new lines.

@@ -1,129 +1,159 @@
 #!/bin/bash
 
-# A script to generate a concise system status report for the Bitcoin node and associated services.
+# A script to generate a concise system status report for the Bitcoin node and associated services
+# in JSON format.
 
 # Define script name for logging
 SCRIPT_NAME="system_health_report.sh"
 
-# --- ANSI Color Codes ---
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-CYAN='\033[0;36m'
-NC='\033[0m' # No Color
+source "$(dirname "$0")/lib/utils.sh"
 
-# --- Helper Functions ---
-# Standardized logging function
-log_message() {
-    local LEVEL="$1"
-    local MESSAGE="$2"
-    echo -e "$(date +"%Y-%m-%d %H:%M:%S %Z") [${SCRIPT_NAME}] [${LEVEL}] ${MESSAGE}"
+# --- Command Checks ---
+REQUIRED_COMMANDS=("jq" "bitcoin-cli" "systemctl" "curl" "bc" "nproc" "awk" "grep" "sed" "pm2" "du" "df" "free" "uptime")
+for cmd in "${REQUIRED_COMMANDS[@]}"; do
+    if ! command -v "$cmd" &> /dev/null; then
+        log_message "CRITICAL" "Required command not found: $cmd. Exiting." "${SCRIPT_NAME}" >&2
+        echo "{\"error\": \"Required command not found: $cmd\"}"
+        exit 1
+    fi
+done
+
+START_TIME=$(date +%s.%N)
+
+# --- Initialization ---
+REPORT_DATA="{}"
+
+# Function to update JSON data safely
+update_json() {
+    local KEY="$1"
+    local VALUE="$2"
+    
+    # Escape double quotes and backslashes in the value to ensure valid JSON string insertion
+    # Replace backslashes first to prevent double-escaping them when escaping quotes
+    VALUE=$(echo "$VALUE" | sed 's/\\/\\\\/g' | sed 's/"/\\"/g')
+    
+    REPORT_DATA=$(echo "$REPORT_DATA" | jq --arg key "$KEY" --arg value "$VALUE" '. + {($key): $value}')
 }
 
-print_header() {
-    echo -e "\n${CYAN}=================================================${NC}"
-    echo -e "${CYAN}$1${NC}"
-    echo -e "${CYAN}=================================================${NC}"
-}
-
-# --- Report Generation ---
-
-log_message "INFO" "### System Status Report ###"
-log_message "INFO" "Generated on: $(date)"
+log_message "INFO" "### System Status Report Generation Started ###" "${SCRIPT_NAME}" >&2
+update_json "timestamp" "$(date +"%Y-%m-%d %H:%M:%S %Z")"
 
 # 1. Bitcoin Core (bitcoind) Sync Status
-print_header "Bitcoin Core (bitcoind) Status"
+BITCOIND_SYNC_STATUS="Unknown"
+BITCOIND_BLOCK_HEIGHT="N/A"
+BITCOIND_PEERS="N/A"
+
 if command -v bitcoin-cli &> /dev/null; then
-    BITCOIN_INFO=$(bitcoin-cli -datadir=/home/bitcoin_knots_node/.bitcoin getblockchaininfo 2>&1)
-    NETWORK_INFO=$(bitcoin-cli -datadir=/home/bitcoin_knots_node/.bitcoin getnetworkinfo 2>&1)
+    BITCOIN_INFO=$(bitcoin-cli -datadir=/home/bitcoin_knots_node/.bitcoin getblockchaininfo 2>/dev/null)
+    NETWORK_INFO=$(bitcoin-cli -datadir=/home/bitcoin_knots_node/.bitcoin getnetworkinfo 2>/dev/null)
     
     if [ $? -eq 0 ]; then
-        PROGRESS=$(echo "$BITCOIN_INFO" | grep "verificationprogress" | sed 's/[^0-9.]*//g')
-        BLOCKS=$(echo "$BITCOIN_INFO" | grep '"blocks"' | sed 's/[^0-9]*//g')
-        PEERS=$(echo "$NETWORK_INFO" | grep '"connections"' | sed 's/[^0-9]*//g')
+        PROGRESS=$(echo "$BITCOIN_INFO" | jq -r '.verificationprogress')
+        BLOCKS=$(echo "$BITCOIN_INFO" | jq -r '.blocks')
+        PEERS=$(echo "$NETWORK_INFO" | jq -r '.connections')
 
         if (( $(echo "$PROGRESS > 0.999" | bc -l) )); then
-            echo -e "Sync Status: ${GREEN}Synced${NC}"
+            BITCOIND_SYNC_STATUS="Synced"
         else
-            echo -e "Sync Status: ${YELLOW}Syncing${NC} (Progress: ${PROGRESS:0:7}%)"
+            BITCOIND_SYNC_STATUS="Syncing (Progress: $(printf "%.2f" "$(echo "$PROGRESS * 100" | bc -l)")%)"
         fi
-        echo "Block Height: $BLOCKS"
-        echo "Peer Connections: $PEERS"
+        BITCOIND_BLOCK_HEIGHT="$BLOCKS"
+        BITCOIND_PEERS="$PEERS"
     else
-        log_message "WARNING" "Could not get bitcoind status." # Standardized warning
-        echo -e "Sync Status: ${YELLOW}Unknown${NC}"
-        echo "Block Height: Unknown"
-        echo "Peer Connections: Unknown"
+        log_message "WARNING" "Could not get bitcoind status." "${SCRIPT_NAME}" >&2
     fi
 else
-    log_message "WARNING" "bitcoin-cli not found." # Standardized warning
-    echo -e "Sync Status: ${YELLOW}bitcoin-cli not found${NC}"
-    echo "Block Height: N/A"
-    echo "Peer Connections: N/A"
+    log_message "WARNING" "bitcoin-cli not found." "${SCRIPT_NAME}" >&2
 fi
+update_json "bitcoin_core_status" "$BITCOIND_SYNC_STATUS"
+update_json "bitcoin_core_block_height" "$BITCOIND_BLOCK_HEIGHT"
+update_json "bitcoin_core_peer_connections" "$BITCOIND_PEERS"
 
 # 2. Electrum Rust Server (electrs) Indexing Status
-print_header "Electrum Rust Server (electrs) Status"
+ELECTRS_STATUS="N/A"
+ELECTRS_DB_SIZE="N/A"
+
 if systemctl is-active --quiet electrs.service; then
-    echo -e "Service Status: ${GREEN}active${NC}"
+    ELECTRS_STATUS="active"
 else
-    echo -e "Service Status: ${YELLOW}inactive${NC}"
+    ELECTRS_STATUS="inactive"
 fi
-ELECTRS_DB_SIZE=$(du -sh "$(dirname "$0")/electrs/db/bitcoin" | awk '{print $1}')
-echo "Database Size: $ELECTRS_DB_SIZE"
+ELECTRS_DB_SIZE=$(du -sh "$(dirname "$0")/electrs/db/bitcoin" 2>/dev/null | awk '{print $1}')
+if [ -z "$ELECTRS_DB_SIZE" ]; then ELECTRS_DB_SIZE="Unknown"; fi
+update_json "electrs_service_status" "$ELECTRS_STATUS"
+update_json "electrs_db_size" "$ELECTRS_DB_SIZE"
 
 # 3. Mempool.space Backend Status
-print_header "Mempool.space Backend Status"
+MEMPOOL_BACKEND_STATUS="N/A"
+MEMPOOL_SIZE="N/A"
+
 if command -v pm2 &> /dev/null && command -v jq &> /dev/null; then
-    MEMPOOL_PM2_STATUS=$(sudo -u bitcoin_knots_node env PM2_HOME=/home/bitcoin_knots_node/.pm2 pm2 jlist | jq -r '.[] | select(.name=="mempool") | .pm2_env.status')
+    MEMPOOL_PM2_STATUS=$(sudo -u bitcoin_knots_node env PM2_HOME=/home/bitcoin_knots_node/.pm2 pm2 jlist 2>/dev/null | jq -r '.[] | select(.name=="mempool") | .pm2_env.status')
     if [ "$MEMPOOL_PM2_STATUS" = "online" ]; then
-        echo -e "Backend Status: ${GREEN}online${NC}"
+        MEMPOOL_BACKEND_STATUS="online"
     else
-        echo -e "Backend Status: ${YELLOW}offline${NC} (Status: $MEMPOOL_PM2_STATUS)"
+        MEMPOOL_BACKEND_STATUS="offline (Status: $MEMPOOL_PM2_STATUS)"
     fi
-    MEMPOOL_SIZE=$(sudo -u bitcoin_knots_node env PM2_HOME=/home/bitcoin_knots_node/.pm2 grep "New size:" /home/bitcoin_knots_node/.pm2/logs/mempool-out.log | tail -n 1 | sed -E 's/.*New size: ([0-9]+).*/\1/')
-    echo "Mempool Size: $MEMPOOL_SIZE transactions"
+    MEMPOOL_SIZE=$(sudo -u bitcoin_knots_node env PM2_HOME=/home/bitcoin_knots_node/.pm2 grep "New size:" /home/bitcoin_knots_node/.pm2/logs/mempool-out.log 2>/dev/null | tail -n 1 | sed -E 's/.*New size: ([0-9]+).*/\1/')
+    if [ -z "$MEMPOOL_SIZE" ]; then MEMPOOL_SIZE="Unknown"; fi
 else
-    log_message "WARNING" "pm2 or jq not found."
-    echo -e "Backend Status: ${YELLOW}pm2 or jq not found${NC}"
-    echo "Mempool Size: N/A"
+    log_message "WARNING" "pm2 or jq not found." "${SCRIPT_NAME}" >&2
 fi
+update_json "mempool_backend_status" "$MEMPOOL_BACKEND_STATUS"
+update_json "mempool_size_transactions" "$MEMPOOL_SIZE"
 
 # 4. Mempool.space Frontend Accessibility
-print_header "Mempool.space Frontend Accessibility"
+NGINX_STATUS="N/A"
+FRONTEND_STATUS="N/A"
+
 if systemctl is-active --quiet nginx.service; then
-    echo -e "Nginx Status: ${GREEN}active${NC}"
+    NGINX_STATUS="active"
 else
-    echo -e "Nginx Status: ${YELLOW}inactive${NC}"
+    NGINX_STATUS="inactive"
 fi
 
-if curl -sI http://127.0.0.1/ | grep -q "HTTP/1.1 200 OK"; then
-    echo -e "Frontend Status: ${GREEN}Accessible${NC}"
+if curl -sI http://127.0.0.1/ &> /dev/null | grep -q "HTTP/1.1 200 OK"; then
+    FRONTEND_STATUS="Accessible"
 else
-    echo -e "Frontend Status: ${YELLOW}Not Accessible${NC}"
+    FRONTEND_STATUS="Not Accessible"
 fi
+update_json "nginx_status" "$NGINX_STATUS"
+update_json "frontend_status" "$FRONTEND_STATUS"
 
-# 5. Resource Utilization
-print_header "System Resource Utilization"
+# 5. System Resource Utilization
+DISK_USAGE="N/A"
+MEM_TOTAL="N/A"
+MEM_USED="N/A"
+CPU_LOAD="N/A"
+
 DISK_USAGE_RAW=$(df -h | awk '/\/dev\/root/ {print $5}')
-echo "Disk Usage: $DISK_USAGE_RAW"
+if [ -n "$DISK_USAGE_RAW" ]; then DISK_USAGE="$DISK_USAGE_RAW"; fi
 
 MEM_RAW=$(free -h | awk '/Mem:/ {print "Total:"$2" Used:"$3}')
-echo "Memory: $MEM_RAW"
-
-NUM_CORES=$(nproc 2>/dev/null || echo 1) # Default to 1 if nproc is not available
-LOAD_AVG_1MIN=$(uptime | awk -F'load average:' '{print $2}' | awk '{print $1}' | sed 's/,//') # Remove comma
-
-# Ensure LOAD_AVG_1MIN is a valid number, default to 0 if not
-if ! [[ "$LOAD_AVG_1MIN" =~ ^[0-9]+([.][0-9]+)?$ ]]; then
-    LOAD_AVG_1MIN=0
+if [ -n "$MEM_RAW" ]; then 
+    MEM_TOTAL=$(echo "$MEM_RAW" | awk -F'Used:' '{print $1}' | sed 's/Total://')
+    MEM_USED=$(echo "$MEM_RAW" | awk -F'Used:' '{print $2}')
 fi
 
-# Perform calculation only if both are valid numbers
-if (( $(echo "$LOAD_AVG_1MIN != 0 && $NUM_CORES != 0" | bc -l) )); then
+NUM_CORES=$(nproc 2>/dev/null || echo 1)
+LOAD_AVG_1MIN=$(uptime | awk -F'load average:' '{print $2}' | awk '{print $1}' | sed 's/,//')
+
+if [[ "$LOAD_AVG_1MIN" =~ ^[0-9]+([.][0-9]+)?$ ]] && (( $(echo "$LOAD_AVG_1MIN != 0 && $NUM_CORES != 0" | bc -l) )); then
     CPU_PERCENT=$(echo "scale=2; ($LOAD_AVG_1MIN / $NUM_CORES) * 100" | bc)
-    echo "CPU Load: ${CPU_PERCENT}%"
+    CPU_LOAD="${CPU_PERCENT}%"
 else
-    echo "CPU Load: N/A"
+    CPU_LOAD="N/A"
 fi
+update_json "disk_usage" "$DISK_USAGE"
+update_json "memory_total" "$MEM_TOTAL"
+update_json "memory_used" "$MEM_USED"
+update_json "cpu_load" "$CPU_LOAD"
 
-log_message "INFO" "### Report Complete ###"
+log_message "INFO" "### System Status Report Generation Complete ###" "${SCRIPT_NAME}" >&2
+
+END_TIME=$(date +%s.%N)
+DURATION=$(echo "$END_TIME - $START_TIME" | bc)
+update_json "duration_seconds" "$(printf "%.3f" "$DURATION")"
+
+# Output JSON
+echo "$REPORT_DATA"
