@@ -6,7 +6,7 @@
 # Define script name for logging
 SCRIPT_NAME="system_health_report.sh"
 
-source "$(dirname "$0")/lib/utils.sh"
+source "$(dirname "$0")/../lib/utils.sh"
 
 # --- Command Checks ---
 REQUIRED_COMMANDS=("jq" "bitcoin-cli" "systemctl" "curl" "bc" "nproc" "awk" "grep" "sed" "pm2" "du" "df" "free" "uptime")
@@ -112,7 +112,7 @@ else
     NGINX_STATUS="inactive"
 fi
 
-if curl -sI http://127.0.0.1/ &> /dev/null | grep -q "HTTP/1.1 200 OK"; then
+if [ "$(curl -o /dev/null -s -w "%{http_code}" http://127.0.0.1/)" = "200" ]; then
     FRONTEND_STATUS="Accessible"
 else
     FRONTEND_STATUS="Not Accessible"
@@ -149,11 +149,10 @@ update_json "memory_total" "$MEM_TOTAL"
 update_json "memory_used" "$MEM_USED"
 update_json "cpu_load" "$CPU_LOAD"
 
-log_message "INFO" "### System Status Report Generation Complete ###" "${SCRIPT_NAME}" >&2
-
 END_TIME=$(date +%s.%N)
 DURATION=$(echo "$END_TIME - $START_TIME" | bc)
 update_json "duration_seconds" "$(printf "%.3f" "$DURATION")"
 
 # Output JSON
 echo "$REPORT_DATA"
+log_message "INFO" "### System Status Report Generation Complete ###" "${SCRIPT_NAME}" >&2

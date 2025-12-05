@@ -350,7 +350,7 @@ sudo journalctl -f -u electrs.service
 **Key Activities:**
 
 1.  **Standardized Logging Implementation:**
-    *   A new `log_message` function was created and integrated into `system_health_report.sh`, `send_health_report_v2.sh`, `send_alert.sh`, and `alert_system_health_report.sh`.
+    *   A new `log_message` function was created and integrated into `system_health_report.sh`, `send_health_report_v2.sh`, `send_alert.sh`, and `alert_system_health_report.sh` (which are now part of `alert_manager/alert_manager.sh` and `scripts/system_health_report.sh`).
     *   All internal logging messages within these scripts were updated to follow the format: `[YYYY-MM-DD HH:MM:SS Z] [SCRIPT_NAME] [LEVEL] MESSAGE`.
 
 2.  **`system_health_report.sh` Refinement:**
@@ -358,15 +358,15 @@ sudo journalctl -f -u electrs.service
     *   Error handling for CPU load calculation was improved, including defaulting to 1 CPU core if `nproc` fails and validating numeric inputs for `bc`.
 
 3.  **`send_health_report_v2.sh` Parsing & Logging Updates:**
-    *   The parsing logic within this script was completely overhauled to robustly extract data from the consistently formatted output of `system_health_report.sh`.
+    *   The parsing logic within this script (now integrated into `alert_manager/alert_manager.sh`) was completely overhauled to robustly extract data from the consistently formatted output of `system_health_report.sh`.
     *   Internal logging now utilizes the `log_message` function.
     *   The `get_status_color` function's `case` statement patterns were corrected for proper shell escaping, resolving previous syntax errors.
 
 4.  **`send_alert.sh` Logging Updates:**
-    *   All internal logging within the `send_alert.sh` script was updated to use the new `log_message` function.
+    *   All internal logging within the `send_alert.sh` script (now integrated into `alert_manager/alert_manager.sh`) was updated to use the new `log_message` function.
 
 5.  **`alert_system_health_report.sh` Logging & Output:**
-    *   Internal logging was updated to use `log_message`.
+    *   Internal logging (now part of `alert_manager/alert_manager.sh`) was updated to use `log_message`.
     *   The output structure was refined to be more consistent with `KEY: VALUE` pairs.
 
 6.  **Automated Integrity Test Script (`test_notification_scripts.sh`) Creation:**
@@ -386,21 +386,58 @@ sudo journalctl -f -u electrs.service
 **Investigation & Troubleshooting:**
 
 1.  **Initial Diagnosis:** Confirmed via `pm2 logs mempool` and `pm2 list` that the `mempool` backend process was active and processing transactions. This indicated the problem was within the health report script itself, not the service.
+
 2.  **Script Analysis:** Examination of `system_health_report.sh` revealed that the status check relied on parsing the text output of `pm2 list` or `pm2 show`.
+
 3.  **Root Cause Identification:** Through a series of debugging steps, it was determined that running the script with `sudo` created an execution environment where the `pm2` commands (even when run as the correct user with `sudo -u bitcoin_knots_node`) produced output that was not being parsed correctly by `grep` or `awk`. The key issue was the loss of the `PM2_HOME` environment variable and inconsistencies in text-based table formatting.
+
 4.  **Failed Attempts:**
+
     *   Refining `grep` patterns.
+
     *   Switching from `pm2 list` to `pm2 show`.
+
     *   Using `awk` to parse tabular output.
+
     *   Explicitly setting the `PM2_HOME` environment variable.
+
 
 **Resolution:**
 
+
 The script was modified to use a more robust method for status checking:
 
+
+
 1.  The `pm2 jlist` command was used, which provides process information in a stable JSON format.
+
 2.  The `jq` command-line JSON processor was used to parse the output from `pm2 jlist` and reliably extract the status field (`.pm2_env.status`).
+
 
 **Outcome:**
 
+
 The `system_health_report.sh` script now correctly and reliably reports the Mempool.space backend status as "online". The root cause was inconsistent output parsing, which has been resolved by switching to a structured data format (JSON) for inter-process communication.
+
+
+### Session Log: 2025-12-04 - Project Restructuring and Path Updates
+
+**Objective:** Reorganize loose files into a structured directory hierarchy and update all relevant script and configuration paths to reflect these changes, ensuring no breaking changes.
+
+**Key Activities:**
+
+1.  **Directory Creation:** Created new directories: `docs/`, `logs/`, `config/`, and `scripts/`.
+2.  **File Relocation:**
+    *   `DOCS.md` moved to `docs/`.
+    *   `alert_system.log` and `project_log.md` moved to `logs/`.
+    *   `logrotate_bitcoin_node_helper.conf` and `sasl_passwd` moved to `config/`.
+    *   `system_health_report_debug.sh` and `system_health_report.sh` moved to `scripts/`.
+3.  **Path Updates in Scripts and Configuration:**
+    *   Modified `alert_manager/alert_manager.sh` to correctly reference `scripts/system_health_report.sh` and `logs/system_health_report.log`.
+    *   Updated `alert_manager/config.yaml` to point to `logs/system_health_report.log`.
+    *   Adjusted the `source` path for `lib/utils.sh` within `scripts/system_health_report.sh`.
+    *   Modified `config/logrotate_bitcoin_node_helper.conf` to reflect the new paths for `logs/system_health_report.log` and `logs/alert_system.log`.
+4.  **Cron Job Updates:** Updated the crontab for the `bitcoin_knots_node` user to correctly reference `scripts/system_health_report.sh` and `logs/system_health_report.log`.
+5.  **Verification:** Performed a thorough check of all modified files and cron jobs to ensure paths were correctly updated and no breaking changes were introduced. Confirmed that `README.md` did not require updates.
+
+**Outcome:** The project structure is now more organized, with related files grouped into logical directories. All critical scripts and configurations have been successfully updated to use the new paths, and the system is expected to continue functioning without issues due to the restructuring.

@@ -133,41 +133,63 @@ check_services() {
 
 check_health_metrics() {
     log "INFO" "Checking health metrics..."
-    local health_report
-    health_report=$(/home/bitcoin_knots_node/bitcoin_node_helper/system_health_report.sh)
+    local health_report_json
+    health_report_json=$(/home/bitcoin_knots_node/bitcoin_node_helper/scripts/system_health_report.sh 2>/dev/null)
 
-    # -- Check Disk Usage ----------------------------------------------------
+    # Ensure jq is installed
+    if ! command -v jq &> /dev/null; then
+        log "ERROR" "jq is not installed. Cannot parse health report JSON."
+        return
+    fi
+
+    # Extract values using jq
     local disk_usage
-    disk_usage=$(echo "$health_report" | grep "Disk Usage" | awk '{print $3}' | sed 's/%//')
+    disk_usage=$(echo "$health_report_json" | jq -r '(.disk_usage | rtrimstr("%") | tonumber?)') # Convert to number for comparison
+    local memory_used_gb
+    memory_used_gb=$(echo "$health_report_json" | jq -r '(.memory_used | ascii_downcase | gsub(" "; "") | rtrimstr("gi") | tonumber?)')
+    local memory_total_gb
+    memory_total_gb=$(echo "$health_report_json" | jq -r '(.memory_total | ascii_downcase | gsub(" "; "") | rtrimstr("gi") | tonumber?)')
+    local cpu_load
+    cpu_load=$(echo "$health_report_json" | jq -r '(.cpu_load | rtrimstr("%") | tonumber?)')
+    local frontend_status
+    frontend_status=$(echo "$health_report_json" | jq -r '.frontend_status')
+
     local disk_warn_threshold
     disk_warn_threshold=$(get_config "thresholds.disk_usage_warn_percent")
     local disk_crit_threshold
     disk_crit_threshold=$(get_config "thresholds.disk_usage_critical_percent")
 
     if (( $(echo "$disk_usage > $disk_crit_threshold" | bc -l) )); then
-        send_email "CRITICAL: Disk Usage High" "Disk usage is at $disk_usage%, exceeding the critical threshold of $disk_crit_threshold%."
+        send_email "CRITICAL: Disk Usage High" "Disk usage is at ${disk_usage}%, exceeding the critical threshold of ${disk_crit_threshold}%."
     elif (( $(echo "$disk_usage > $disk_warn_threshold" | bc -l) )); then
-        send_email "WARNING: Disk Usage High" "Disk usage is at $disk_usage%, exceeding the warning threshold of $disk_warn_threshold%."
+        send_email "WARNING: Disk Usage High" "Disk usage is at ${disk_usage}%, exceeding the warning threshold of ${disk_warn_threshold}%."
     fi
 
     # -- Check Memory Usage --------------------------------------------------
-    local mem_usage
-    mem_usage=$(echo "$health_report" | grep "Memory Usage" | awk '{print $3}' | sed 's/%//')
+    local mem_usage_percent
+    if (( $(echo "$memory_total_gb > 0" | bc -l) )); then
+        mem_usage_percent=$(echo "scale=2; ($memory_used_gb / $memory_total_gb) * 100" | bc -l)
+    else
+        mem_usage_percent=0
+    fi
     local mem_warn_threshold
     mem_warn_threshold=$(get_config "thresholds.mem_usage_warn_percent")
 
-    if (( $(echo "$mem_usage > $mem_warn_threshold" | bc -l) )); then
-        send_email "WARNING: Memory Usage High" "Memory usage is at $mem_usage%, exceeding the warning threshold of $mem_warn_threshold%."
+    if (( $(echo "$mem_usage_percent > $mem_warn_threshold" | bc -l) )); then
+        send_email "WARNING: Memory Usage High" "Memory usage is at ${mem_usage_percent}%, exceeding the warning threshold of ${mem_warn_threshold}% (Used: ${memory_used_gb}Gi, Total: ${memory_total_gb}Gi)."
     fi
 
     # -- Check CPU Load ------------------------------------------------------
-    local cpu_load
-    cpu_load=$(echo "$health_report" | grep "CPU Load" | awk '{print $3}')
     local cpu_warn_threshold
     cpu_warn_threshold=$(get_config "thresholds.cpu_load_warn")
 
     if (( $(echo "$cpu_load > $cpu_warn_threshold" | bc -l) )); then
-        send_email "WARNING: CPU Load High" "CPU load is at $cpu_load, exceeding the warning threshold of $cpu_warn_threshold."
+        send_email "WARNING: CPU Load High" "CPU load is at ${cpu_load}%, exceeding the warning threshold of ${cpu_warn_threshold}%."
+    fi
+
+    # -- Check Frontend Status -----------------------------------------------
+    if [[ "$frontend_status" == "Not Accessible" ]]; then
+        send_email "CRITICAL: Mempool Frontend Down" "The Mempool frontend is reported as 'Not Accessible'."
     fi
 }
 
@@ -193,10 +215,7 @@ get_status_color() {
 send_daily_report() {
     log "INFO" "Generating and sending daily health report..."
     local health_report_raw
-    health_report_raw=$(/home/bitcoin_knots_node/bitcoin_node_helper/system_health_report.sh)
-    # Clean ANSI color codes from the report
-    local health_report
-    health_report=$(echo "$health_report_raw" | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g")
+    health_report_raw=$(/home/bitcoin_knots_node/bitcoin_node_helper/scripts/system_health_report.sh)
     
     local template_file="$TEMPLATE_DIR/daily_report.html"
     if [[ ! -f "$template_file" ]]; then
@@ -208,33 +227,46 @@ send_daily_report() {
     local email_body
     email_body=$(<"$template_file")
 
-    # -- 1. Parse Report into Variables ---
-    local bitcoind_sync_status electrs_status mempool_status nginx_status frontend_status
-    local bitcoind_block_height bitcoind_peers mempool_size disk_usage mem_used mem_total cpu_load electrs_db_size
+    # -- 1. Parse Report into Variables (using jq for JSON output) ---
+    local health_report_json
+    health_report_json=$(/home/bitcoin_knots_node/bitcoin_node_helper/scripts/system_health_report.sh 2>/dev/null)
 
-    bitcoind_sync_status=$(echo "$health_report" | awk -F': ' '/Sync Status:/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2}')
-    bitcoind_block_height=$(echo "$health_report" | awk -F': ' '/Block Height:/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2}')
-    bitcoind_peers=$(echo "$health_report" | awk -F': ' '/Peer Connections:/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2}')
+    # Ensure jq is installed
+    if ! command -v jq &> /dev/null; then
+        log "ERROR" "jq is not installed. Cannot parse health report JSON for daily report."
+        send_email "ERROR: Daily Report Generation Failed" "jq is not installed on the system. Please install it to enable daily health reports."
+        return
+    fi
 
-        electrs_status=$(echo "$health_report" | grep "Electrum Rust Server (electrs) Status" -A 1 | grep "Service Status:" | awk '{print $3}')
-    electrs_db_size=$(echo "$health_report" | awk '/Database Size:/ {print $3}')
+    local bitcoind_sync_status bitcoind_block_height bitcoind_peers
+    local electrs_status electrs_db_size
+    local mempool_backend_status mempool_size_transactions
+    local nginx_status frontend_status
+    local disk_usage memory_total memory_used cpu_load
 
-    mempool_status=$(echo "$health_report" | awk '/mempool/ && /online/ {print "online"}')
-    mempool_size=$(echo "$health_report" | awk -F': ' '/Mempool Size:/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2}')
+    bitcoind_sync_status=$(echo "$health_report_json" | jq -r '.bitcoin_core_status')
+    bitcoind_block_height=$(echo "$health_report_json" | jq -r '.bitcoin_core_block_height')
+    bitcoind_peers=$(echo "$health_report_json" | jq -r '.bitcoin_core_peer_connections')
 
-    nginx_status=$(echo "$health_report" | awk -F': ' '/Nginx Status:/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2}')
-    frontend_status=$(echo "$health_report" | awk -F': ' '/Frontend Status:/ {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2}')
+    electrs_status=$(echo "$health_report_json" | jq -r '.electrs_service_status')
+    electrs_db_size=$(echo "$health_report_json" | jq -r '.electrs_db_size')
 
-    disk_usage=$(echo "$health_report" | awk -F': ' '/Disk Usage:/ {print $2}')
-    mem_used=$(echo "$health_report" | awk -F'Used:' '/Memory:/ {print $2}' | awk '{print $1}')
-    mem_total=$(echo "$health_report" | awk -F'Total:' '/Memory:/ {print $2}' | awk '{print $1}')
-    cpu_load=$(echo "$health_report" | awk -F': ' '/CPU Load:/ {print $2}')
+    mempool_backend_status=$(echo "$health_report_json" | jq -r '.mempool_backend_status')
+    mempool_size_transactions=$(echo "$health_report_json" | jq -r '.mempool_size_transactions')
+
+    nginx_status=$(echo "$health_report_json" | jq -r '.nginx_status')
+    frontend_status=$(echo "$health_report_json" | jq -r '.frontend_status')
+
+    disk_usage=$(echo "$health_report_json" | jq -r '.disk_usage')
+    memory_total=$(echo "$health_report_json" | jq -r '.memory_total')
+    memory_used=$(echo "$health_report_json" | jq -r '.memory_used')
+    cpu_load=$(echo "$health_report_json" | jq -r '.cpu_load')
 
     # -- 2. Define Status Coloring Logic ---
     local bitcoind_color electrs_color mempool_color nginx_color frontend_color
     bitcoind_color=$(get_status_color "$bitcoind_sync_status")
     electrs_color=$(get_status_color "$electrs_status")
-    mempool_color=$(get_status_color "$mempool_status")
+    mempool_color=$(get_status_color "$mempool_backend_status") # Corrected variable
     nginx_color=$(get_status_color "$nginx_status")
     frontend_color=$(get_status_color "$frontend_status")
     
@@ -248,17 +280,17 @@ send_daily_report() {
     # Services
     email_body=${email_body//__ELECTRS_STATUS__/$electrs_status}
     email_body=${email_body//__ELECTRS_COLOR__/$electrs_color}
-    email_body=${email_body//__MEMPOOL_STATUS__/$mempool_status}
+    email_body=${email_body//__MEMPOOL_STATUS__/$mempool_backend_status} # Corrected placeholder substitution
     email_body=${email_body//__MEMPOOL_COLOR__/$mempool_color}
     email_body=${email_body//__NGINX_STATUS__/$nginx_status}
     email_body=${email_body//__NGINX_COLOR__/$nginx_color}
     email_body=${email_body//__FRONTEND_STATUS__/$frontend_status}
     email_body=${email_body//__FRONTEND_COLOR__/$frontend_color}
-    email_body=${email_body//__MEMPOOL_SIZE__/$mempool_size}
+    email_body=${email_body//__MEMPOOL_SIZE__/$mempool_size_transactions} # Corrected placeholder substitution
     # System Resources
     email_body=${email_body//__DISK_USAGE__/$disk_usage}
-    email_body=${email_body//__MEM_USED__/$mem_used}
-    email_body=${email_body//__MEM_TOTAL__/$mem_total}
+    email_body=${email_body//__MEM_USED__/$memory_used} # Corrected placeholder substitution
+    email_body=${email_body//__MEM_TOTAL__/$memory_total} # Corrected placeholder substitution
     email_body=${email_body//__CPU_LOAD__/$cpu_load}
     email_body=${email_body//__ELECTRS_DB_SIZE__/$electrs_db_size}
     

@@ -5,16 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bitcoin Node Health Report</title>
 <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f8f9fa; margin: 0; padding: 0; }
-    .container { max-width: 600px; margin: 20px auto; background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); overflow: hidden; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f8f9fa; margin: 0; padding: 0; text-align: center; }
+    .container { max-width: 600px; margin: 20px auto; background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); overflow: hidden; text-align: left; } /* Align container content to left */
     .header { background-color: #0056b3; color: #ffffff; padding: 20px; text-align: center; }
     .header h1 { margin: 0; font-size: 24px; }
     .content { padding: 20px; }
     .section { margin-bottom: 20px; }
-    .section h2 { font-size: 18px; color: #343a40; margin-top: 0; border-bottom: 2px solid #dee2e6; padding-bottom: 5px;}
-    .metrics-table { width: 100%; border-collapse: collapse; }
+    .section h2 { font-size: 18px; color: #343a40; margin-top: 0; border-bottom: 2px solid #dee2e6; padding-bottom: 5px; text-align: left; }
+    .metrics-table { width: 100%; border-collapse: collapse; text-align: left; } /* Align table content to left */
     .metrics-table td { padding: 10px; border-bottom: 1px solid #e9ecef; }
     .metrics-table td:first-child { font-weight: bold; color: #495057; width: 40%; }
+    .metrics-table td:last-child { text-align: right; }
     .status { font-weight: bold; text-transform: capitalize; }
     .footer { text-align: center; padding: 15px; font-size: 12px; color: #6c757d; }
 </style>
@@ -29,28 +30,28 @@
         <div class="section">
             <h2>Bitcoin Core (bitcoind)</h2>
             <table class="metrics-table">
-                <tr><td>Sync Status</td><td><span class="status" style="color: __BITCOIND_COLOR__;">__BITCOIND_SYNC_STATUS__</span></td></tr>
-                <tr><td>Block Height</td><td><b>__BITCOIND_BLOCK_HEIGHT__</b></td></tr>
-                <tr><td>Peer Connections</td><td><b>__BITCOIND_PEERS__</b></td></tr>
+                <tr><td>Sync Status</td><td style="text-align: right;"><span style="display: inline-block; min-width: 80px; text-align: center;"><span class="status" style="color: __BITCOIND_COLOR__;">__BITCOIND_SYNC_STATUS__</span></span></td></tr>
+                <tr><td>Block Height</td><td style="text-align: right;"><span style="display: inline-block; min-width: 80px; text-align: center;"><b>__BITCOIND_BLOCK_HEIGHT__</b></span></td></tr>
+                <tr><td>Peer Connections</td><td style="text-align: right;"><span style="display: inline-block; min-width: 80px; text-align: center;"><b>__BITCOIND_PEERS__</b></span></td></tr>
             </table>
         </div>
         <div class="section">
             <h2>Services</h2>
             <table class="metrics-table">
-                <tr><td>Electrum Server (electrs)</td><td><span class="status" style="color: __ELECTRS_COLOR__;">__ELECTRS_STATUS__</span></td></tr>
-                <tr><td>Mempool Backend</td><td><span class="status" style="color: __MEMPOOL_COLOR__;">__MEMPOOL_STATUS__</span></td></tr>
-                <tr><td>Nginx</td><td><span class="status" style="color: __NGINX_COLOR__;">__NGINX_STATUS__</span></td></tr>
-                <tr><td>Mempool Frontend</td><td><span class="status" style="color: __FRONTEND_COLOR__;">__FRONTEND_STATUS__</span></td></tr>
-                <tr><td>Mempool Size</td><td><b>__MEMPOOL_SIZE__</b></td></tr>
+                <tr><td>Electrum Server (electrs)</td><td style="text-align: right;"><span style="display: inline-block; min-width: 80px; text-align: center;"><span class="status" style="color: __ELECTRS_COLOR__;">__ELECTRS_STATUS__</span></span></td></tr>
+                <tr><td>Mempool Backend</td><td style="text-align: right;"><span style="display: inline-block; min-width: 80px; text-align: center;"><span class="status" style="color: __MEMPOOL_COLOR__;">__MEMPOOL_STATUS__</span></span></td></tr>
+                <tr><td>Nginx</td><td style="text-align: right;"><span style="display: inline-block; min-width: 80px; text-align: center;"><span class="status" style="color: __NGINX_COLOR__;">__NGINX_STATUS__</span></span></td></tr>
+                <tr><td>Mempool Frontend</td><td style="text-align: right;"><span style="display: inline-block; min-width: 80px; text-align: center;"><span class="status" style="color: __FRONTEND_COLOR__;">__FRONTEND_STATUS__</span></span></td></tr>
+                <tr><td>Mempool Size</td><td style="text-align: right;"><span style="display: inline-block; min-width: 80px; text-align: center;"><b>__MEMPOOL_SIZE__</b></span></td></tr>
             </table>
         </div>
         <div class="section">
             <h2>System Resources</h2>
             <table class="metrics-table">
-                <tr><td>Disk Usage</td><td><b>__DISK_USAGE__</b></td></tr>
-                <tr><td>Memory Usage</td><td><b>__MEM_USED__</b> / <b>__MEM_TOTAL__</b></td></tr>
-                <tr><td>CPU Load</td><td><b>__CPU_LOAD__</b></td></tr>
-                <tr><td>Electrs DB Size</td><td><b>__ELECTRS_DB_SIZE__</b></td></tr>
+                <tr><td>Disk Usage</td><td style="text-align: right;"><span style="display: inline-block; min-width: 80px; text-align: center;"><b>__DISK_USAGE__</b></span></td></tr>
+                <tr><td>Memory Usage</td><td style="text-align: right;"><span style="display: inline-block; min-width: 80px; text-align: center;"><b>__MEM_USED__</b> / <b>__MEM_TOTAL__</b></span></td></tr>
+                <tr><td>CPU Load</td><td style="text-align: right;"><span style="display: inline-block; min-width: 80px; text-align: center;"><b>__CPU_LOAD__</b></span></td></tr>
+                <tr><td>Electrs DB Size</td><td style="text-align: right;"><span style="display: inline-block; min-width: 80px; text-align: center;"><b>__ELECTRS_DB_SIZE__</b></span></td></tr>
             </table>
         </div>
     </div>
