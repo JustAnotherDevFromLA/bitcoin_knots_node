@@ -47,3 +47,15 @@ This section is for developers who wish to contribute to the helper scripts or d
 
 - **Contribution Guidelines:** Please submit a pull request with a clear description of your changes.
 - **Testing:** Ensure any new scripts are tested on a non-production environment.
+
+## Project Structure
+
+The project is organized into the following directories:
+- `docs/`: Project documentation, including `DOCS.md`.
+- `logs/`: Contains various log files, such as `alert_system.log` and `project_log.md`.
+- `config/`: Stores configuration files like `logrotate_bitcoin_node_helper.conf` and `sasl_passwd`.
+- `scripts/`: Houses helper scripts, including `system_health_report.sh` and `system_health_report_debug.sh`.
+- `alert_manager/`: Contains the alert management system, including `alert_manager.sh` and its configuration.
+- `electrs/`: Contains the Electrum Rust Server (electrs) source code and related files.
+- `lib/`: Shared utility functions and libraries for other scripts.
+- `mempool/`: Contains the mempool.space backend and frontend components.
