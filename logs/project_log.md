@@ -441,3 +441,31 @@ The `system_health_report.sh` script now correctly and reliably reports the Memp
 5.  **Verification:** Performed a thorough check of all modified files and cron jobs to ensure paths were correctly updated and no breaking changes were introduced. Confirmed that `README.md` did not require updates.
 
 **Outcome:** The project structure is now more organized, with related files grouped into logical directories. All critical scripts and configurations have been successfully updated to use the new paths, and the system is expected to continue functioning without issues due to the restructuring.
+
+### Session Log: 2025-12-05 - Folder Structure Refinement & Debugging
+
+**Objective:** Finalize folder structure, address any remaining pathing issues, and ensure script integrity after the reorganization.
+
+**Key Activities:**
+
+1.  **Duplicate Log File Removal:**
+    *   Identified a duplicate `system_health_report.log` file at the project root (`/home/bitcoin_knots_node/bitcoin_node_helper/system_health_report.log`) using `find`.
+    *   Removed the redundant file to maintain a clean and organized structure.
+
+2.  **Login Script Verification:**
+    *   Noted that the `system_health_report.sh` script was no longer running on user login, indicating an issue with the `.bashrc` entry.
+    *   Due to access restrictions outside the project directory, the user was informed and subsequently confirmed they had manually fixed the `.bashrc` entry.
+
+3.  **Comprehensive Path Audit:**
+    *   Performed a detailed review of all critical configuration files and scripts to ensure paths were correctly updated following the folder reorganization.
+    *   Files checked:
+        *   `alert_manager/config.yaml`: All paths were correct.
+        *   `config/logrotate_bitcoin_node_helper.conf`: All paths were correct.
+        *   `crontab -l`: All cron job paths were correct.
+        *   `lib/utils.sh`: No hardcoded paths were found.
+        *   `scripts/system_health_report_debug.sh`: Identified an issue where the script attempted to `tail` a non-existent `electrs.log` file.
+
+4.  **`system_health_report_debug.sh` Fix:**
+    *   Removed the erroneous line `tail -n 10 "$(dirname "$0")/electrs/electrs.log"` from `scripts/system_health_report_debug.sh` as the `electrs.log` file is not located at that path and its logging is handled by `systemctl` (journald) or would be explicitly configured to `logs/electrs.log`.
+
+**Outcome:** The folder structure is finalized, a redundant log file has been removed, and a minor bug in the debug health report script has been resolved. All critical paths in configurations and scripts are verified.

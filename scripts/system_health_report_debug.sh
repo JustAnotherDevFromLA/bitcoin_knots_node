@@ -41,8 +41,7 @@ echo "--- Status ---"
 systemctl is-active --quiet electrs.service && echo -e "${GREEN}electrs is active.${NC}" || echo -e "${YELLOW}electrs is inactive.${NC}"
 echo "--- Database Size ---"
 du -sh "$(dirname "$0")/electrs/db/bitcoin"
-echo "--- Latest Log Entries (last 10) ---"
-tail -n 10 "$(dirname "$0")/electrs/electrs.log"
+
 
 # 3. Mempool.space Backend Status
 print_header "Mempool.space Backend Status"
