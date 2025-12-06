@@ -118,9 +118,9 @@ sudo journalctl -f -u electrs.service
 7. Reviewed `electrs.toml` and confirmed `cookie_file` was uncommented and `auth` was commented out.
 
 **Resolution:**
-11. Modified `/home/bitcoin_knots_node/bitcoin_node_helper/electrs/electrs.toml` to explicitly enable cookie-based authentication by uncommenting `cookie_file` and commenting out `auth`.
-12. Modified `/home/bitcoin_knots_node/.bitcoin/bitcoin.conf` to comment out `rpcuser` and `rpcpassword` to revert to cookie-based authentication for `bitcoind`.
-13. Restarted `bitcoind.service` and `electrs.service`.
+1. Modified `/home/bitcoin_knots_node/bitcoin_node_helper/electrs/electrs.toml` to explicitly enable cookie-based authentication by uncommenting `cookie_file` and commenting out `auth`.
+2. Modified `/home/bitcoin_knots_node/.bitcoin/bitcoin.conf` to comment out `rpcuser` and `rpcpassword` to revert to cookie-based authentication for `bitcoind`.
+3. Restarted `bitcoind.service` and `electrs.service`.
 
 **Verification:**
 1. `systemctl status electrs.service` confirmed the service is now `active (running)`.
@@ -355,7 +355,7 @@ sudo journalctl -f -u electrs.service
 
 2.  **`system_health_report.sh` Refinement:**
     *   The script was updated to ensure all output, particularly status and resource utilization metrics, is consistently structured in a `KEY: VALUE` format.
-    *   Error handling for CPU load calculation was improved, including defaulting to 1 CPU core if `nproc` fails and validating numeric inputs for `bc`.`
+    *   Error handling for CPU load calculation was improved, including defaulting to 1 CPU core if `nproc` fails and validating numeric inputs for `bc`.
 
 3.  **`send_health_report_v2.sh` Parsing & Logging Updates:**
     *   The parsing logic within this script (now integrated into `alert_manager/alert_manager.sh`) was completely overhauled to robustly extract data from the consistently formatted output of `system_health_report.sh`.
@@ -450,7 +450,7 @@ The `system_health_report.sh` script now correctly and reliably reports the Memp
 
 1.  **Duplicate Log File Removal:**
     *   Identified a duplicate `system_health_report.log` file at the project root (`/home/bitcoin_knots_node/bitcoin_node_helper/system_health_report.log`) using `find`.
-    *   Removed the redundant file to maintain a clean and organized structure.`
+    *   Removed the redundant file to maintain a clean and organized structure.
 
 2.  **Login Script Verification:**
     *   Noted that the `system_health_report.sh` script was no longer running on user login, indicating an issue with the `.bashrc` entry.
