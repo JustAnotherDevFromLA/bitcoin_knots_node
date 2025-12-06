@@ -78,7 +78,7 @@ if systemctl is-active --quiet electrs.service; then
 else
     ELECTRS_STATUS="inactive"
 fi
-ELECTRS_DB_SIZE=$(du -sh "$(dirname "$0")/electrs/db/bitcoin" 2>/dev/null | awk '{print $1}')
+ELECTRS_DB_SIZE=$(sudo -u bitcoin_knots_node du -sh "/home/bitcoin_knots_node/bitcoin_node_helper/electrs/db/bitcoin" 2>/dev/null | awk '{print $1}')
 if [ -z "$ELECTRS_DB_SIZE" ]; then ELECTRS_DB_SIZE="Unknown"; fi
 update_json "electrs_service_status" "$ELECTRS_STATUS"
 update_json "electrs_db_size" "$ELECTRS_DB_SIZE"
