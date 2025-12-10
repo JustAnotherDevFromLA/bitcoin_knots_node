@@ -1,67 +1,88 @@
 <svg width="800" height="600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
-    <rect width="100%" height="100%" style="fill: #f0f0f0;" />
+    <style>
+        .bg { fill: #f0f0f0; }
+        .title { font-family: sans-serif; font-size: 24px; font-weight: bold; }
+        .metric-title { font-family: sans-serif; font-size: 16px; font-weight: bold; }
+        .metric-value { font-family: sans-serif; font-size: 20px; }
+        .status-green { fill: #28a745; }
+        .status-yellow { fill: #ffc107; }
+        .status-red { fill: #dc3545; }
+        .tooltip { visibility: hidden; }
+        .metric:hover .tooltip { visibility: visible; }
+        .tooltip-bg { fill: #333; fill-opacity: 0.8; }
+        .tooltip-text { fill: #fff; font-family: sans-serif; font-size: 12px; }
+    </style>
 
-    <text x="50%" y="40" text-anchor="middle" style="font-family: sans-serif; font-size: 24px; font-weight: bold;">Bitcoin Node Health &amp; Monitoring</text>
-    <text x="50%" y="65" text-anchor="middle" style="font-family: sans-serif; font-size: 12px;">Last Updated: 2025-12-10 21:00:01 UTC</text>
+    <rect class="bg" width="100%" height="100%" />
+
+    <text x="50%" y="40" text-anchor="middle" class="title">Bitcoin Node Health & Monitoring</text>
+    <text x="50%" y="65" text-anchor="middle" font-family="sans-serif" font-size="12px">Last Updated: 2025-12-10 21:30:01 UTC</text>
 
     <!-- Bitcoind Sync Status -->
-    <g transform="translate(100, 120)">
-        <title>Block Height: 927318 | Peers: 20</title>
-        <circle cx="0" cy="0" r="40" style="fill: #28a745;" />
-        <text x="0" y="5" text-anchor="middle" style="fill: white; font-family: sans-serif; font-size: 20px;">Synced</text>
-        <text x="0" y="70" text-anchor="middle" style="font-family: sans-serif; font-size: 16px; font-weight: bold;">Bitcoind Sync</text>
+    <g class="metric" transform="translate(100, 120)">
+        <circle cx="0" cy="0" r="40" class="status-green" />
+        <text x="0" y="5" text-anchor="middle" fill="white" class="metric-value">Synced</text>
+        <text x="0" y="70" text-anchor="middle" class="metric-title">Bitcoind Sync</text>
+        <g class="tooltip">
+            <rect x="-100" y="-80" width="200" height="50" rx="5" class="tooltip-bg" />
+            <text x="0" y="-60" text-anchor="middle" class="tooltip-text">Block Height: 927324</text>
+            <text x="0" y="-40" text-anchor="middle" class="tooltip-text">Peers: 19</text>
+        </g>
     </g>
 
     <!-- Electrs Indexing Progress -->
-    <g transform="translate(300, 120)">
-        <title>DB Size: 108G</title>
-        <circle cx="0" cy="0" r="40" style="fill: #28a745;" />
-        <text x="0" y="5" text-anchor="middle" style="fill: white; font-family: sans-serif; font-size: 20px;">active</text>
-        <text x="0" y="70" text-anchor="middle" style="font-family: sans-serif; font-size: 16px; font-weight: bold;">Electrs Status</text>
+    <g class="metric" transform="translate(300, 120)">
+        <circle cx="0" cy="0" r="40" class="status-green" />
+        <text x="0" y="5" text-anchor="middle" fill="white" class="metric-value">active</text>
+        <text x="0" y="70" text-anchor="middle" class="metric-title">Electrs Status</text>
+        <g class="tooltip">
+            <rect x="-75" y="-70" width="150" height="30" rx="5" class="tooltip-bg" />
+            <text x="0" y="-55" text-anchor="middle" class="tooltip-text">DB Size: 108G</text>
+        </g>
     </g>
 
     <!-- Mempool Backend Status -->
-    <g transform="translate(500, 120)">
-        <title>Transactions: 1120</title>
-        <circle cx="0" cy="0" r="40" style="fill: #28a745;" />
-        <text x="0" y="5" text-anchor="middle" style="fill: white; font-family: sans-serif; font-size: 20px;">online</text>
-        <text x="0" y="70" text-anchor="middle" style="font-family: sans-serif; font-size: 16px; font-weight: bold;">Mempool Backend</text>
+    <g class="metric" transform="translate(500, 120)">
+        <circle cx="0" cy="0" r="40" class="status-red" />
+        <text x="0" y="5" text-anchor="middle" fill="white" class="metric-value">offline (Status: )</text>
+        <text x="0" y="70" text-anchor="middle" class="metric-title">Mempool Backend</text>
+        <g class="tooltip">
+            <rect x="-100" y="-70" width="200" height="30" rx="5" class="tooltip-bg" />
+            <text x="0" y="-55" text-anchor="middle" class="tooltip-text">Transactions: 2461</text>
+        </g>
     </g>
     
     <!-- Uptime -->
-    <g transform="translate(700, 120)">
-        <circle cx="0" cy="0" r="40" style="fill: #28a745;" />
-        <text x="0" y="5" text-anchor="middle" style="fill: white; font-family: sans-serif; font-size: 20px;">4d</text>
-        <text x="0" y="70" text-anchor="middle" style="font-family: sans-serif; font-size: 16px; font-weight: bold;">Uptime</text>
+    <g class="metric" transform="translate(700, 120)">
+        <circle cx="0" cy="0" r="40" class="status-green" />
+        <text x="0" y="5" text-anchor="middle" fill="white" class="metric-value">4 weeks, 4d 3h 39m</text>
+        <text x="0" y="70" text-anchor="middle" class="metric-title">Uptime (Days)</text>
     </g>
 
     <!-- Disk Usage -->
-    <g transform="translate(200, 300)">
-        <title>Disk Usage: 54%</title>
-        <rect x="-50" y="-20" width="100" height="40" style="fill: #28a745;" />
-        <text x="0" y="5" text-anchor="middle" style="fill: white; font-family: sans-serif; font-size: 20px;">54%</text>
-        <text x="0" y="50" text-anchor="middle" style="font-family: sans-serif; font-size: 16px; font-weight: bold;">Disk Usage</text>
+    <g class="metric" transform="translate(200, 300)">
+        <rect x="-50" y="-20" width="100" height="40" class="status-green" />
+        <text x="0" y="5" text-anchor="middle" fill="white" class="metric-value">55%</text>
+        <text x="0" y="50" text-anchor="middle" class="metric-title">Disk Usage</text>
     </g>
 
     <!-- Memory Usage -->
-    <g transform="translate(400, 300)">
-        <title>Memory Usage: 36%</title>
-        <rect x="-50" y="-20" width="100" height="40" style="fill: #28a745;" />
-        <text x="0" y="5" text-anchor="middle" style="fill: white; font-family: sans-serif; font-size: 20px;">36%</text>
-        <text x="0" y="50" text-anchor="middle" style="font-family: sans-serif; font-size: 16px; font-weight: bold;">Memory Usage</text>
+    <g class="metric" transform="translate(400, 300)">
+        <rect x="-50" y="-20" width="100" height="40" class="status-yellow" />
+        <text x="0" y="5" text-anchor="middle" fill="white" class="metric-value">37%</text>
+        <text x="0" y="50" text-anchor="middle" class="metric-title">Memory Usage</text>
     </g>
 
     <!-- CPU Load -->
-    <g transform="translate(600, 300)">
-        <title>CPU Load: 45%</title>
-        <rect x="-50" y="-20" width="100" height="40" style="fill: #28a745;" />
-        <text x="0" y="5" text-anchor="middle" style="fill: white; font-family: sans-serif; font-size: 20px;">45%</text>
-        <text x="0" y="50" text-anchor="middle" style="font-family: sans-serif; font-size: 16px; font-weight: bold;">CPU Load</text>
+    <g class="metric" transform="translate(600, 300)">
+        <rect x="-50" y="-20" width="100" height="40" class="status-red" />
+        <text x="0" y="5" text-anchor="middle" fill="white" class="metric-value">69.00%</text>
+        <text x="0" y="50" text-anchor="middle" class="metric-title">CPU Load</text>
     </g>
     
     <!-- Error Handling -->
     <g id="error-indicator" visibility="hidden" transform="translate(400, 500)">
-        <rect x="-150" y="-25" width="300" height="50" rx="5" style="fill: #dc3545;" />
-        <text x="0" y="5" text-anchor="middle" style="fill: white; font-family: sans-serif; font-size: 16px; font-weight: bold;">Error fetching data!</text>
+        <rect x="-150" y="-25" width="300" height="50" rx="5" class="status-red" />
+        <text x="0" y="5" text-anchor="middle" fill="white" class="metric-title">Error fetching data!</text>
     </g>
 </svg>
