@@ -51,7 +51,7 @@
     *   Automated critical alerts for service failures or threshold breaches.
     *   Structured log management.
 
-### Phase 5: Optimization & Hardening (Current/Ongoing)
+### Phase 5: Optimization & Hardening (Completed)
 
 *   **Milestones:**
     *   Review and apply security best practices (e.g., firewall rules, user permissions).
@@ -63,7 +63,7 @@
     *   More secure and efficient node operation.
     *   Reduced maintenance overhead.
 
-### Phase 6: Future Enhancements (Planned)
+### Phase 6: Future Enhancements (Current/Ongoing)
 
 *   **Milestones:**
     *   Lightning Network Daemon (LND) installation and configuration.

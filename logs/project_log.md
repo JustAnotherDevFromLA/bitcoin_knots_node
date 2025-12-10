@@ -483,3 +483,36 @@ The `system_health_report.sh` script now correctly and reliably reports the Memp
     *   Phases covered: Core Node Setup & Synchronization (Completed), Electrum Rust Server (electrs) Integration (Completed), Mempool.space Backend & Frontend (Completed), System Health Monitoring & Alerting (Completed), Optimization & Hardening (Current/Ongoing), and Future Enhancements (Planned).
 
 **Outcome:** A comprehensive project roadmap document has been successfully created and saved, providing a clear overview of the project's progress and future direction.
+
+## Session Summary: 2025-12-10
+
+**Objective:** Investigate and resolve high disk usage, create a system monitoring dashboard, and improve its UI/UX.
+
+**Key Activities:**
+
+1.  **Disk Usage Analysis & Resolution:**
+    *   Identified that the `/home/bitcoin_knots_node/bitcoin_node_helper/backups` directory was consuming 754G of disk space due to a lack of a pruning mechanism in the `backup.sh` script.
+    *   Modified `scripts/backup.sh` to automatically prune backups older than 7 days.
+    *   Manually deleted old backups, reducing disk usage from 86% to 54%.
+    *   Calculated that with a 7-day retention policy, approximately 840GB of disk space will remain available.
+
+2.  **Dashboard Creation:**
+    *   Created a simple, real-time, web-based dashboard to display core server metrics (CPU, Memory, Disk I/O, Network).
+    *   The dashboard consists of a Node.js/Express backend (`dashboard/server.js`) and an HTML/CSS/JavaScript frontend (`dashboard/public/`).
+    *   The backend provides a `/api/metrics` endpoint to serve system information.
+    *   The frontend uses Chart.js to visualize the data.
+
+3.  **Dashboard Accessibility & Troubleshooting:**
+    *   Configured the Node.js server to listen on `0.0.0.0` to allow external connections.
+    *   Opened port `3000` in the VM's firewall (`ufw`).
+    *   Identified that the dashboard was still inaccessible from outside the VM due to a missing inbound security rule in the Azure Network Security Group.
+    *   Provided instructions on how to add the required inbound rule in the Azure portal.
+    *   Determined the public IP of the VM to be `20.157.80.149`.
+
+4.  **UI/UX Improvement & Bug Fixing:**
+    *   Addressed a "forever loading loop" by troubleshooting the backend server and ensuring it runs persistently using `pm2`.
+    *   Fixed a "spazzing out" UI bug by refactoring the JavaScript to create the metric cards only once on page load, instead of on every data fetch.
+    *   Improved the chart update mechanism to prevent jarring animations and provide a smoother user experience.
+    *   Refactored the HTML, CSS, and JavaScript for better modularity, consistency, and maintainability.
+
+**Outcome:** The high disk usage issue has been resolved, and a functional, real-time server metrics dashboard has been created and deployed. The dashboard is now accessible externally, and the UI has been improved for a better user experience.
