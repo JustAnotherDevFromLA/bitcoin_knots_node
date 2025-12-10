@@ -26,8 +26,8 @@ ELECTRS_DB_SIZE=$(echo "$HEALTH_DATA" | jq -r '.electrs_db_size')
 MEMPOOL_STATUS=$(echo "$HEALTH_DATA" | jq -r '.mempool_backend_status')
 MEMPOOL_SIZE=$(echo "$HEALTH_DATA" | jq -r '.mempool_size_transactions')
 DISK_USAGE=$(echo "$HEALTH_DATA" | jq -r '.disk_usage' | sed 's/%//')
-MEMORY_USAGE=$(echo "$HEALTH_DATA" | jq -r '.memory_used' | sed 's/Gi//' | awk '{print $1}')
-MEMORY_TOTAL=$(echo "$HEALTH_DATA" | jq -r '.memory_total' | sed 's/Gi//' | awk '{print $1}')
+MEMORY_USAGE=$(echo "$HEALTH_DATA" | jq -r '.memory_used' | sed 's/Gi//' | xargs)
+MEMORY_TOTAL=$(echo "$HEALTH_DATA" | jq -r '.memory_total' | sed 's/Gi//' | xargs)
 CPU_LOAD=$(echo "$HEALTH_DATA" | jq -r '.cpu_load' | sed 's/%//')
 UPTIME=$(uptime -p | sed 's/up //; s/ days, /d /; s/ day, /d /; s/ hours, /h /; s/ hour, /h /; s/ minutes/m/; s/ minute/m/')
 
@@ -51,10 +51,12 @@ fi
 
 # --- Calculate Memory Usage Percentage ---
 if (( $(echo "$MEMORY_TOTAL > 0" | bc -l) )); then
-    MEMORY_PERCENTAGE=$(echo "scale=0; ($MEMORY_USAGE / $MEMORY_TOTAL) * 100" | bc)
+    export LC_NUMERIC="C"
+    MEMORY_PERCENTAGE=$(echo "scale=2; ($MEMORY_USAGE / $MEMORY_TOTAL) * 100" | bc | cut -d. -f1)
 else
     MEMORY_PERCENTAGE=0
 fi
+
 
 # --- Create the SVG ---
 sed -e "s/__TIMESTAMP__/$TIMESTAMP/g" \
