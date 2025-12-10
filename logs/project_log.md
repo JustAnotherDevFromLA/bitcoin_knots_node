@@ -312,7 +312,7 @@ sudo journalctl -f -u electrs.service
     *   Made `send_health_report_v2.sh` executable.
     *   Updated the daily cron job to execute `send_health_report_v2.sh` instead of the old script.
 
-**Outcome:** The daily system health report email is now well-formatted, highlighting key statuses and metrics, and is designed for optimal readability across both desktop and mobile devices. The user is satisfied with the current styling and format.
+**Outcome:** The daily email report is now well-formatted, highlighting key statuses and metrics, and is designed for optimal readability across both desktop and mobile devices. The user is satisfied with the current styling and format.
 
 ### Session Log: 2025-11-27 (Continued) - Email Content Enhancement
 
@@ -395,7 +395,7 @@ sudo journalctl -f -u electrs.service
 
     *   Refining `grep` patterns.
 
-    *   Switching from `pm2 list` to `pm2 show`.
+    *   Changing from `pm2 list` to `pm2 show`.
 
     *   Using `awk` to parse tabular output.
 
@@ -512,7 +512,86 @@ The `system_health_report.sh` script now correctly and reliably reports the Memp
 4.  **UI/UX Improvement & Bug Fixing:**
     *   Addressed a "forever loading loop" by troubleshooting the backend server and ensuring it runs persistently using `pm2`.
     *   Fixed a "spazzing out" UI bug by refactoring the JavaScript to create the metric cards only once on page load, instead of on every data fetch.
-    *   Improved the chart update mechanism to prevent jarring animations and provide a smoother user experience.
+    *   Improved the chart update mechanism to prevent jarring animations and provide a smoother user experience by setting `animation.duration` to 200 and calling `chart.update('none')`.
     *   Refactored the HTML, CSS, and JavaScript for better modularity, consistency, and maintainability.
 
 **Outcome:** The high disk usage issue has been resolved, and a functional, real-time server metrics dashboard has been created and deployed. The dashboard is now accessible externally, and the UI has been improved for a better user experience.
+
+### Session Summary: 2025-12-10
+
+**Objective:** Investigate and resolve issues with `electrs` and `mempool` services being reported as down, and fix an inaccuracy in the system health report.
+
+**Key Activities:**
+
+1.  **`electrs` Service Issue:**
+    *   Found `electrs` was "inactive" and failing with "receiving on an empty and disconnected channel" error.
+    *   Verified `bitcoind` was running and listening on the correct P2P port.
+    *   Attempted verbose logging and P2P configuration changes in `electrs.toml` without success.
+    *   **Resolution:** Restarting the `bitcoind` service resolved the `electrs` P2P connection issue. `electrs` is now running correctly.
+
+2.  **`mempool` Backend Status Inaccuracy:**
+    *   `mempool_backend_status` was reported as "offline" by `system_health_report.sh`, despite `pm2` showing it as "online".
+    *   Identified that `jq` was failing to parse the `pm2 jlist` output due to extra header lines and ANSI escape codes.
+    *   **Resolution:** Updated `scripts/system_health_report.sh` to filter out non-JSON lines from `pm2 jlist` using `grep '^\['` before piping to `jq`. The `mempool` backend status is now correctly reported as "online".
+
+**Outcome:** Both `electrs` and `mempool` services are now fully operational, and the system health report accurately reflects their status.
+```markdown
+### Session Summary: 2025-12-10
+
+**Objective:** Generate a comprehensive documentation suite based on the project log and manage its version control.
+
+**Key Activities:**
+
+1.  **Documentation Generation:**
+    *   Created a `documentation/` directory.
+    *   Generated the following documentation files based on `project_log.md` and general project knowledge:
+        *   `documentation/README.md` (Overview and Table of Contents)
+        *   `documentation/installation.md` (Detailed installation steps for Bitcoin Knots, Electrs, Mempool.space, Nginx, and user management)
+        *   `documentation/user_guide.md` (System architecture, service management, script usage, email notifications, Mempool frontend access)
+        *   `documentation/api_reference.md` (References to Mempool API, Electrs RPC, and Bitcoin Core RPC documentation)
+        *   `documentation/troubleshooting.md` (Solutions for common issues with Electrs and Mempool backend)
+        *   `documentation/examples.md` (Example usage scenarios for health checks, blockchain info, Mempool API, and Electrum wallet connection)
+    *   Ensured content adheres to project standards and uses Markdown.
+
+2.  **Version Control:**
+    *   Created a new Git branch named `feature/documentation`.
+    *   Added the `documentation/` directory to the staging area.
+    *   Committed the new documentation with the message "feat: add comprehensive documentation suite".
+    *   Merged the `feature/documentation` branch into `master` using a fast-forward merge.
+    *   Pushed the `master` branch to the remote repository.
+    *   Deleted the local `feature/documentation` branch.
+    *   Attempted to delete the remote `feature/documentation` branch, but it was noted that the remote branch did not exist (possibly already deleted or never pushed).
+
+**Outcome:** A comprehensive documentation suite has been successfully generated and integrated into the project's `master` branch. All relevant changes have been version-controlled, and the project now has detailed documentation for installation, usage, and troubleshooting.
+```markdown
+### Session Summary: 2025-12-10 (Infographic Generation & Debugging)
+
+**Objective:** Generate a visual infographic to accompany the technical documentation and ensure its correct rendering.
+
+**Key Activities:**
+
+1.  **Initial Infographic Generation:**
+    *   Created `docs/infographic_template.svg` (initial template with CSS styles).
+    *   Created `scripts/generate_infographic.sh` to populate the SVG template with data from `system_health_report.sh`.
+    *   Generated `docs/infographic.svg`.
+    *   Added `infographic_template.svg`, `generate_infographic.sh`, and `infographic.svg` to Git and pushed changes.
+
+2.  **Infographic Debugging - Memory Usage Calculation:**
+    *   **Issue:** Initial generated infographics displayed "Memory Usage: 0%".
+    *   **Investigation:** Debugging `generate_infographic.sh` with `echo` statements revealed that `bc` was truncating floating-point results to 0 due to `scale=0` before multiplication.
+    *   **Resolution:** Modified `generate_infographic.sh` to set `scale=2` before division in `bc` and then use `cut -d. -f1` to extract the integer part of the percentage.
+    *   The fix was committed and pushed.
+
+3.  **Infographic Debugging - Rendering Errors & Inline Styles:**
+    *   **Issue:** User reported "Error rendering embedded code" and "Invalid image source", even after the memory usage fix. This indicated a potential compatibility issue with the SVG structure or styling in certain rendering environments.
+    *   **Investigation:** Suspected the use of `<style>` tags within the SVG might be problematic for some renderers.
+    *   **Resolution:**
+        *   Created a new template `docs/infographic_template_final.svg` with all CSS styles inlined as `style` attributes on individual SVG elements.
+        *   Removed tooltips temporarily for simplification, then re-introduced them using the standard SVG `<title>` element for better compatibility.
+        *   Modified `generate_infographic.sh` to use `infographic_template_final.svg` and populate the new inline style placeholders, including an adjusted uptime display.
+    *   The updated script and template were committed and pushed.
+
+4.  **Automated Updates:**
+    *   Set up a cron job to run `scripts/generate_infographic.sh` every 5 minutes to automatically update `docs/infographic.svg`.
+
+**Outcome:** A dynamic, automatically updating SVG infographic is now correctly generated with accurate data and is expected to render reliably across different environments. The generation script has been robustified, and the SVG template uses more compatible styling methods.
