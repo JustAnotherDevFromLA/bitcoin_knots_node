@@ -1,12 +1,12 @@
 <svg width="800" height="600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
     <rect width="100%" height="100%" style="fill: #f0f0f0;" />
 
-    <text x="50%" y="40" text-anchor="middle" style="font-family: sans-serif; font-size: 24px; font-weight: bold;">Bitcoin Node Health & Monitoring</text>
-    <text x="50%" y="65" text-anchor="middle" style="font-family: sans-serif; font-size: 12px;">Last Updated: 2025-12-10 20:53:41 UTC</text>
+    <text x="50%" y="40" text-anchor="middle" style="font-family: sans-serif; font-size: 24px; font-weight: bold;">Bitcoin Node Health &amp; Monitoring</text>
+    <text x="50%" y="65" text-anchor="middle" style="font-family: sans-serif; font-size: 12px;">Last Updated: 2025-12-10 20:57:10 UTC</text>
 
     <!-- Bitcoind Sync Status -->
     <g transform="translate(100, 120)">
-        <title>Block Height: 927317 | Peers: 19</title>
+        <title>Block Height: 927318 | Peers: 19</title>
         <circle cx="0" cy="0" r="40" style="fill: #28a745;" />
         <text x="0" y="5" text-anchor="middle" style="fill: white; font-family: sans-serif; font-size: 20px;">Synced</text>
         <text x="0" y="70" text-anchor="middle" style="font-family: sans-serif; font-size: 16px; font-weight: bold;">Bitcoind Sync</text>
@@ -22,7 +22,7 @@
 
     <!-- Mempool Backend Status -->
     <g transform="translate(500, 120)">
-        <title>Transactions: 1016</title>
+        <title>Transactions: 461</title>
         <circle cx="0" cy="0" r="40" style="fill: #28a745;" />
         <text x="0" y="5" text-anchor="middle" style="fill: white; font-family: sans-serif; font-size: 20px;">online</text>
         <text x="0" y="70" text-anchor="middle" style="font-family: sans-serif; font-size: 16px; font-weight: bold;">Mempool Backend</text>
@@ -53,9 +53,9 @@
 
     <!-- CPU Load -->
     <g transform="translate(600, 300)">
-        <title>CPU Load: 6%</title>
+        <title>CPU Load: 5%</title>
         <rect x="-50" y="-20" width="100" height="40" style="fill: #28a745;" />
-        <text x="0" y="5" text-anchor="middle" style="fill: white; font-family: sans-serif; font-size: 20px;">6%</text>
+        <text x="0" y="5" text-anchor="middle" style="fill: white; font-family: sans-serif; font-size: 20px;">5%</text>
         <text x="0" y="50" text-anchor="middle" style="font-family: sans-serif; font-size: 16px; font-weight: bold;">CPU Load</text>
     </g>
     
