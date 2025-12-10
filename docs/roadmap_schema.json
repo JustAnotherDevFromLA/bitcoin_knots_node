@@ -1,0 +1,94 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Bitcoin Node Helper Project Roadmap",
+  "description": "A structured representation of the project roadmap.",
+  "type": "object",
+  "properties": {
+    "projectInfo": {
+      "type": "object",
+      "properties": {
+        "vision": {
+          "type": "string"
+        },
+        "goal": {
+          "type": "string"
+        }
+      },
+      "required": ["vision", "goal"]
+    },
+    "phases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "phaseId": {
+            "type": "integer"
+          },
+          "phaseName": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["Completed", "Ongoing", "Planned"]
+          },
+          "milestones": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "deliverables": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "timeline": {
+            "type": "object",
+            "properties": {
+              "startDate": {
+                "type": "string",
+                "format": "date"
+              },
+              "endDate": {
+                "type": "string",
+                "format": "date"
+              }
+            }
+          },
+          "dependencies": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        },
+        "required": ["phaseId", "phaseName", "status", "milestones", "deliverables"]
+      }
+    },
+    "risks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "risk": {
+            "type": "string"
+          },
+          "likelihood": {
+            "type": "string",
+            "enum": ["Low", "Medium", "High"]
+          },
+          "impact": {
+            "type": "string",
+            "enum": ["Low", "Medium", "High"]
+          },
+          "mitigation": {
+            "type": "string"
+          }
+        },
+        "required": ["risk", "likelihood", "impact", "mitigation"]
+      }
+    }
+  },
+  "required": ["projectInfo", "phases", "risks"]
+}

@@ -1,0 +1,161 @@
+{
+  "projectInfo": {
+    "vision": "To provide a robust, self-sufficient, and easily maintainable Bitcoin and Lightning node environment with comprehensive monitoring and alerting capabilities.",
+    "goal": "To simplify the setup, operation, and maintenance of a full Bitcoin node, Electrum Rust Server (electrs), and Mempool.space instance, ensuring high availability and proactive issue detection."
+  },
+  "phases": [
+    {
+      "phaseId": 1,
+      "phaseName": "Core Node Setup & Synchronization",
+      "status": "Completed",
+      "milestones": [
+        "Bitcoin Knots node installed and configured.",
+        "Initial blockchain synchronization completed.",
+        "bitcoind service running reliably."
+      ],
+      "deliverables": [
+        "Working bitcoind service.",
+        "Verified node synchronization."
+      ],
+      "timeline": {
+        "startDate": null,
+        "endDate": null
+      },
+      "dependencies": []
+    },
+    {
+      "phaseId": 2,
+      "phaseName": "Electrum Rust Server (electrs) Integration",
+      "status": "Completed",
+      "milestones": [
+        "electrs installed and configured.",
+        "electrs service integrated with bitcoind.",
+        "Initial electrs indexing completed."
+      ],
+      "deliverables": [
+        "Working electrs service providing Electrum client access.",
+        "Validated electrs database indexing."
+      ],
+      "timeline": {
+        "startDate": null,
+        "endDate": null
+      },
+      "dependencies": [1]
+    },
+    {
+      "phaseId": 3,
+      "phaseName": "Mempool.space Backend & Frontend",
+      "status": "Completed",
+      "milestones": [
+        "Mempool.space backend installed and configured.",
+        "Mempool.space backend connected to bitcoind and MariaDB.",
+        "Mempool.space frontend built and deployed.",
+        "Nginx configured for Mempool.space frontend and backend API proxy."
+      ],
+      "deliverables": [
+        "Fully functional Mempool.space instance accessible via web browser.",
+        "Real-time transaction and blockchain data display."
+      ],
+      "timeline": {
+        "startDate": null,
+        "endDate": null
+      },
+      "dependencies": [2]
+    },
+    {
+      "phaseId": 4,
+      "phaseName": "System Health Monitoring & Alerting",
+      "status": "Completed",
+      "milestones": [
+        "Comprehensive system health scripts developed.",
+        "Email notification system configured.",
+        "alert_manager.sh script implemented for critical alerts and daily reports.",
+        "Log rotation configured for project logs."
+      ],
+      "deliverables": [
+        "Automated daily system health reports via email (HTML format).",
+        "Automated critical alerts for service failures or threshold breaches.",
+        "Structured log management."
+      ],
+      "timeline": {
+        "startDate": null,
+        "endDate": null
+      },
+      "dependencies": [1, 2, 3]
+    },
+    {
+      "phaseId": 5,
+      "phaseName": "Optimization & Hardening",
+      "status": "Ongoing",
+      "milestones": [
+        "Review and apply security best practices (e.g., firewall rules, user permissions).",
+        "Performance tuning for services (bitcoind, electrs, MariaDB).",
+        "Disk space management and pruning strategies.",
+        "Implement regular backup procedures for critical data.",
+        "Explore containerization (Docker) for improved isolation and deployment."
+      ],
+      "deliverables": [
+        "More secure and efficient node operation.",
+        "Reduced maintenance overhead."
+      ],
+      "timeline": {
+        "startDate": null,
+        "endDate": null
+      },
+      "dependencies": [4]
+    },
+    {
+      "phaseId": 6,
+      "phaseName": "Future Enhancements",
+      "status": "Planned",
+      "milestones": [
+        "Lightning Network Daemon (LND) installation and configuration.",
+        "Web interface for node management and monitoring.",
+        "Integration with other Bitcoin/Lightning applications.",
+        "Automated updates and patching strategy."
+      ],
+      "deliverables": [
+        "Full Lightning node functionality.",
+        "Centralized management dashboard.",
+        "Expanded application ecosystem."
+      ],
+      "timeline": {
+        "startDate": null,
+        "endDate": null
+      },
+      "dependencies": [5]
+    }
+  ],
+  "risks": [
+    {
+      "risk": "Hardware Failure",
+      "likelihood": "Medium",
+      "impact": "High",
+      "mitigation": "Implement regular, automated backups of critical data to a separate location."
+    },
+    {
+      "risk": "Software Vulnerabilities",
+      "likelihood": "Low",
+      "impact": "High",
+      "mitigation": "Follow a regular patching and update schedule for all system components."
+    },
+    {
+      "risk": "Data Corruption",
+      "likelihood": "Low",
+      "impact": "High",
+      "mitigation": "Use reliable hardware, verify backup integrity, and monitor system logs."
+    },
+    {
+      "risk": "Extended Downtime",
+      "likelihood": "Medium",
+      "impact": "Medium",
+      "mitigation": "Utilize the monitoring and alerting system for rapid failure notification and response."
+    },
+    {
+      "risk": "Limited Disk Space",
+      "likelihood": "High",
+      "impact": "Medium",
+      "mitigation": "Implement blockchain pruning, log rotation, and disk usage monitoring."
+    }
+  ]
+}
