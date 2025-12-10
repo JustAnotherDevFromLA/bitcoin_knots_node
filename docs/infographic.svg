@@ -2,11 +2,11 @@
     <rect width="100%" height="100%" style="fill: #f0f0f0;" />
 
     <text x="50%" y="40" text-anchor="middle" style="font-family: sans-serif; font-size: 24px; font-weight: bold;">Bitcoin Node Health &amp; Monitoring</text>
-    <text x="50%" y="65" text-anchor="middle" style="font-family: sans-serif; font-size: 12px;">Last Updated: 2025-12-10 20:57:10 UTC</text>
+    <text x="50%" y="65" text-anchor="middle" style="font-family: sans-serif; font-size: 12px;">Last Updated: 2025-12-10 21:00:01 UTC</text>
 
     <!-- Bitcoind Sync Status -->
     <g transform="translate(100, 120)">
-        <title>Block Height: 927318 | Peers: 19</title>
+        <title>Block Height: 927318 | Peers: 20</title>
         <circle cx="0" cy="0" r="40" style="fill: #28a745;" />
         <text x="0" y="5" text-anchor="middle" style="fill: white; font-family: sans-serif; font-size: 20px;">Synced</text>
         <text x="0" y="70" text-anchor="middle" style="font-family: sans-serif; font-size: 16px; font-weight: bold;">Bitcoind Sync</text>
@@ -22,7 +22,7 @@
 
     <!-- Mempool Backend Status -->
     <g transform="translate(500, 120)">
-        <title>Transactions: 461</title>
+        <title>Transactions: 1120</title>
         <circle cx="0" cy="0" r="40" style="fill: #28a745;" />
         <text x="0" y="5" text-anchor="middle" style="fill: white; font-family: sans-serif; font-size: 20px;">online</text>
         <text x="0" y="70" text-anchor="middle" style="font-family: sans-serif; font-size: 16px; font-weight: bold;">Mempool Backend</text>
@@ -53,9 +53,9 @@
 
     <!-- CPU Load -->
     <g transform="translate(600, 300)">
-        <title>CPU Load: 5%</title>
+        <title>CPU Load: 45%</title>
         <rect x="-50" y="-20" width="100" height="40" style="fill: #28a745;" />
-        <text x="0" y="5" text-anchor="middle" style="fill: white; font-family: sans-serif; font-size: 20px;">5%</text>
+        <text x="0" y="5" text-anchor="middle" style="fill: white; font-family: sans-serif; font-size: 20px;">45%</text>
         <text x="0" y="50" text-anchor="middle" style="font-family: sans-serif; font-size: 16px; font-weight: bold;">CPU Load</text>
     </g>
     
