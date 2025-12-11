@@ -1,0 +1,132 @@
+Issue Type,Summary,Description,Epic Name,Epic Link,Parent
+
+Epic,"Migration - Azure to Home Lab","This epic covers all activities required to move the Bitcoin Node Helper services, data, and configurations from the Azure VM to the local Ubuntu home lab machine.",MIG,,
+Story,"Prepare Source Azure Server for Migration","As a node operator, I want to gracefully shut down services and create comprehensive backups on the Azure VM so that data consistency is maintained and all critical components are secured before transfer.",,MIG,
+Task,"Stop Nginx service.","`sudo systemctl stop nginx.service`",,,Prepare Source Azure Server for Migration
+Task,"Stop Mempool.space Backend & Dashboard PM2 processes.","`sudo -u bitcoin_knots_node env PM2_HOME=/home/bitcoin_knots_node/.pm2 pm2 stop all`",,,Prepare Source Azure Server for Migration
+Task,"Stop Electrs service.","`sudo systemctl stop electrs.service`",,,Prepare Source Azure Server for Migration
+Task,"Stop Bitcoin Core (bitcoind) service.","`sudo systemctl stop bitcoind.service`",,,Prepare Source Azure Server for Migration
+Task,"Disable and backup all cron jobs for root and `bitcoin_knots_node` user.","`crontab -l > /home/bitcoin_knots_node/cron_backup_$(date +%F).txt`
+`sudo -u bitcoin_knots_node crontab -l > /home/bitcoin_knots_node/cron_backup_bitcoin_knots_node_$(date +%F).txt`
+`crontab -r`
+`sudo -u bitcoin_knots_node crontab -r`",,,Prepare Source Azure Server for Migration
+Task,"Create `migration_backup` directory and set permissions.","`mkdir -p /home/bitcoin_knots_node/migration_backup`
+`sudo chown bitcoin_knots_node:bitcoin_knots_node /home/bitcoin_knots_node/migration_backup`",,,Prepare Source Azure Server for Migration
+Task,"Backup Bitcoin Core data directory.","`sudo tar -czvf /home/bitcoin_knots_node/migration_backup/bitcoin_data.tar.gz /home/bitcoin_knots_node/.bitcoin`",,,Prepare Source Azure Server for Migration
+Task,"Backup Electrs database.","`sudo tar -czvf /home/bitcoin_knots_node/migration_backup/electrs_db.tar.gz /home/bitcoin_knots_node/bitcoin_node_helper/electrs/db/bitcoin`",,,Prepare Source Azure Server for Migration
+Task,"Backup Mempool backend configuration.","`cp /home/bitcoin_knots_node/bitcoin_node_helper/mempool/backend/mempool-config.json /home/bitcoin_knots_node/migration_backup/`",,,Prepare Source Azure Server for Migration
+Task,"Backup MariaDB `mempool` database.","`sudo mysqldump -u root -p mempool > /home/bitcoin_knots_node/migration_backup/mempool_mariadb.sql`",,,Prepare Source Azure Server for Migration
+Task,"Backup Nginx configurations.","`sudo tar -czvf /home/bitcoin_knots_node/migration_backup/nginx_configs.tar.gz /etc/nginx`",,,Prepare Source Azure Server for Migration
+Task,"Backup Mempool frontend static files.","`sudo tar -czvf /home/bitcoin_knots_node/migration_backup/mempool_frontend.tar.gz /var/www/mempool/browser`",,,Prepare Source Azure Server for Migration
+Task,"Backup Systemd service files (`bitcoind.service`, `electrs.service`).","`cp /etc/systemd/system/bitcoind.service /home/bitcoin_knots_node/migration_backup/`
+`cp /etc/systemd/system/electrs.service /home/bitcoin_knots_node/migration_backup/`",,,Prepare Source Azure Server for Migration
+Task,"Backup `bitcoin_node_helper` project directory.","`sudo tar -czvf /home/bitcoin_knots_node/migration_backup/bitcoin_node_helper.tar.gz /home/bitcoin_knots_node/bitcoin_node_helper`",,,Prepare Source Azure Server for Migration
+Task,"Backup PM2 configuration.","`sudo tar -czvf /home/bitcoin_knots_node/migration_backup/pm2_home.tar.gz /home/bitcoin_knots_node/.pm2`",,,Prepare Source Azure Server for Migration
+Task,"Backup Postfix and Mailutils configurations.","`sudo tar -czvf /home/bitcoin_knots_node/migration_backup/postfix_mailutils.tar.gz /etc/postfix /etc/mailutils`",,,Prepare Source Azure Server for Migration
+Task,"Backup Fail2ban configurations.","`sudo tar -czvf /home/bitcoin_knots_node/migration_backup/fail2ban_configs.tar.gz /etc/fail2ban`",,,Prepare Source Azure Server for Migration
+Task,"Backup SSH configuration.","`cp -r /home/bitcoin_knots_node/.ssh /home/bitcoin_knots_node/migration_backup/`",,,Prepare Source Azure Server for Migration
+Task,"Transfer `migration_backup` directory to local machine.","`scp -r /home/bitcoin_knots_node/migration_backup <local_user>@<local_ip>:/path/to/local/backup/`",,,Prepare Source Azure Server for Migration
+Task,"Verify integrity of transferred backups (checksums, partial restore).",,,Prepare Source Azure Server for Migration
+
+Story,"Provision Local Home Lab Server (MIG-2)","As a node operator, I want to prepare the local Ubuntu machine with all necessary operating system and software dependencies so that it can host the Bitcoin Node Helper services.",,MIG,
+Task,"Install a fresh copy of Ubuntu Server (same version as Azure VM if possible).",,,Provision Local Home Lab Server (MIG-2)
+Task,"Run `sudo apt update && sudo apt upgrade -y`.",,,Provision Local Home Lab Server (MIG-2)
+Task,"Install essential tools (`curl`, `wget`, `git`, `tar`, `rsync`, `bc`, `net-tools`, `htop`, `iotop`).",,,Provision Local Home Lab Server (MIG-2)
+Task,"Install Bitcoin Core build dependencies.",,,Provision Local Home Lab Server (MIG-2)
+Task,"Install MariaDB Server and Client.",,,Provision Local Home Lab Server (MIG-2)
+Task,"Install Nginx Web Server.",,,Provision Local Home Lab Server (MIG-2)
+Task,"Install Node.js and npm via NVM (ensure matching version).",,,Provision Local Home Lab Server (MIG-2)
+Task,"Install `pm2` globally.",,,Provision Local Home Lab Server (MIG-2)
+Task,"Install Rust (for Electrs).",,,Provision Local Home Lab Server (MIG-2)
+Task,"Install Mail Utilities and Postfix.",,,Provision Local Home Lab Server (MIG-2)
+Task,"Install Fail2ban.",,,Provision Local Home Lab Server (MIG-2)
+Task,"Install `jq` (JSON processor).",,,Provision Local Home Lab Server (MIG-2)
+Task,"Install Uncomplicated Firewall (`ufw`).",,,Provision Local Home Lab Server (MIG-2)
+Task,"Create system users (`bitcoin_knots_node`, `electrs`) and add `bitcoin_knots_node` to sudo group.",,,Provision Local Home Lab Server (MIG-2)
+
+Story,"Restore Data and Configurations on Home Lab Server (MIG-3)","As a node operator, I want to restore all backed-up data and configuration files to their correct locations on the home lab server so that the services can function as they did on Azure.",,MIG,
+Task,"Move `migration_backup` to a temporary restore location (`/tmp/migration_restore`).",,,Restore Data and Configurations on Home Lab Server (MIG-3)
+Task,"Extract `bitcoin_data.tar.gz` to root.",,,Restore Data and Configurations on Home Lab Server (MIG-3)
+Task,"Extract `electrs_db.tar.gz` to root.",,,Restore Data and Configurations on Home Lab Server (MIG-3)
+Task,"Extract `nginx_configs.tar.gz` to root.",,,Restore Data and Configurations on Home Lab Server (MIG-3)
+Task,"Extract `mempool_frontend.tar.gz` to root.",,,Restore Data and Configurations on Home Lab Server (MIG-3)
+Task,"Extract `bitcoin_node_helper.tar.gz` to `/home/bitcoin_knots_node/`.",,,Restore Data and Configurations on Home Lab Server (MIG-3)
+Task,"Extract `pm2_home.tar.gz` to `/home/bitcoin_knots_node/`.",,,Restore Data and Configurations on Home Lab Server (MIG-3)
+Task,"Extract `postfix_mailutils.tar.gz` to root.",,,Restore Data and Configurations on Home Lab Server (MIG-3)
+Task,"Extract `fail2ban_configs.tar.gz` to root.",,,Restore Data and Configurations on Home Lab Server (MIG-3)
+Task,"Copy `mempool-config.json` to Mempool backend directory.",,,Restore Data and Configurations on Home Lab Server (MIG-3)
+Task,"Copy `bitcoind.service` to `/etc/systemd/system/`.",,,Restore Data and Configurations on Home Lab Server (MIG-3)
+Task,"Copy `electrs.service` to `/etc/systemd/system/`.",,,Restore Data and Configurations on Home Lab Server (MIG-3)
+Task,"Copy `cron_backup_*.txt` files to `/home/bitcoin_knots_node/`.",,,Restore Data and Configurations on Home Lab Server (MIG-3)
+Task,"Restore SSH configuration.",,,Restore Data and Configurations on Home Lab Server (MIG-3)
+Task,"Restore MariaDB `mempool` database from `mempool_mariadb.sql`.",,,Restore Data and Configurations on Home Lab Server (MIG-3)
+Task,"Correct file and directory ownership and permissions for all restored items (especially `bitcoin_knots_node` user files, `/var/www/mempool/browser` for `www-data`, Nginx configs, logs).",,,Restore Data and Configurations on Home Lab Server (MIG-3)
+
+Story,"Configure Services and Firewall on Home Lab Server (MIG-4)","As a node operator, I want to adjust configuration files for the new environment and secure network access so that all services are properly connected and protected.",,MIG,
+Task,"Review and update `bitcoin.conf` for `datadir`, `rpcbind`, `bind` (if needed for local network access).",,,Configure Services and Firewall on Home Lab Server (MIG-4)
+Task,"Review and update `electrs.toml` for `daemon_dir`, `cookie`, `db_dir`, `electrum_rpc_addr` (if needed for local network access).",,,Configure Services and Firewall on Home Lab Server (MIG-4)
+Task,"Review and update Nginx configuration files (`/etc/nginx/sites-available/default`, `mempool-nginx.conf`) for `listen` directives and `root` paths.",,,Configure Services and Firewall on Home Lab Server (MIG-4)
+Task,"Review and update `mempool/backend/mempool-config.json` for `COOKIE_PATH`, `CORE_RPC_HOST`, `DB_HOST`.",,,Configure Services and Firewall on Home Lab Server (MIG-4)
+Task,"Review Systemd service files (`bitcoind.service`, `electrs.service`) for correct `ExecStart` paths.",,,Configure Services and Firewall on Home Lab Server (MIG-4)
+Task,"Review project scripts (`alert_manager.sh`, `system_health_report.sh`, etc.) for absolute paths and update `alert_manager/config.yaml` and `/etc/postfix/sasl_passwd` if needed.",,,Configure Services and Firewall on Home Lab Server (MIG-4)
+Task,"Configure `ufw` firewall to allow necessary incoming connections (SSH, Bitcoin P2P, Electrs RPC, HTTP/S, Dashboard).","`sudo ufw allow 22/tcp`
+`sudo ufw allow 8333/tcp`
+`sudo ufw allow 8332/tcp`
+`sudo ufw allow 50001/tcp`
+`sudo ufw allow 50002/tcp`
+`sudo ufw allow 80/tcp`
+`sudo ufw allow 443/tcp`
+`sudo ufw allow 3000/tcp`
+`sudo ufw enable`
+`sudo ufw status`",,,Configure Services and Firewall on Home Lab Server (MIG-4)
+
+Story,"Verify and Go-Live on Home Lab Server (MIG-5)","As a node operator, I want to start all services incrementally and thoroughly test their functionality so that I can confirm a successful migration and decommission the old Azure VM.",,MIG,
+Task,"Start MariaDB service and enable it at boot.","`sudo systemctl start mariadb.service && sudo systemctl enable mariadb.service`",,,Verify and Go-Live on Home Lab Server (MIG-5)
+Task,"Start Bitcoin Core (bitcoind) service, enable at boot, and monitor logs.","`sudo systemctl start bitcoind.service && sudo systemctl enable bitcoind.service`",,,Verify and Go-Live on Home Lab Server (MIG-5)
+Task,"Start Electrs service, enable at boot, and monitor logs.","`sudo systemctl start electrs.service && sudo systemctl enable electrs.service`",,,Verify and Go-Live on Home Lab Server (MIG-5)
+Task,"Start Mempool.space Backend & Dashboard PM2 processes, save PM2 state, and monitor logs.","`sudo -u bitcoin_knots_node env PM2_HOME=/home/bitcoin_knots_node/.pm2 pm2 start all`
+`sudo -u bitcoin_knots_node env PM2_HOME=/home/bitcoin_knots_node/.pm2 pm2 save`",,,Verify and Go-Live on Home Lab Server (MIG-5)
+Task,"Start Nginx service, enable at boot, and monitor logs.","`sudo systemctl start nginx.service && sudo systemctl enable nginx.service`",,,Verify and Go-Live on Home Lab Server (MIG-5)
+Task,"Re-enable all cron jobs.",,,Verify and Go-Live on Home Lab Server (MIG-5)
+Task,"Monitor all service logs for errors and unexpected behavior.",,,Verify and Go-Live on Home Lab Server (MIG-5)
+Task,"Verify Bitcoin Core functionality (`getblockchaininfo`, `getconnectioncount`).",,,Verify and Go-Live on Home Lab Server (MIG-5)
+Task,"Verify Electrs functionality (check logs, connect Electrum wallet).",,,Verify and Go-Live on Home Lab Server (MIG-5)
+Task,"Verify Mempool.space functionality (access frontend, check data updates).",,,Verify and Go-Live on Home Lab Server (MIG-5)
+Task,"Verify Email Alerts (trigger report, check content, test critical alert).",,,Verify and Go-Live on Home Lab Server (MIG-5)
+Task,"Verify Dashboard functionality (access dashboard, check metrics).",,,Verify and Go-Live on Home Lab Server (MIG-5)
+Task,"Update DNS A record to point to the new home lab IP (if applicable).",,,Verify and Go-Live on Home Lab Server (MIG-5)
+Task,"Decommission Azure VM.",,,Verify and Go-Live on Home Lab Server (MIG-5)
+
+Epic,"Monitoring Enhancements (MON)","This epic focuses on enhancing the existing monitoring system, specifically by implementing bandwidth monitoring and refining alerting thresholds.",MON,,
+Story,"Implement Bandwidth Monitoring (MON-1)","As a node operator, I want to track network bandwidth usage so that I can monitor node performance and identify potential network bottlenecks or unusual activity.",,MON,
+Task,"Research and select a suitable bandwidth monitoring tool (e.g., `vnstat`, `iftop`, Prometheus/Grafana setup).",,,Implement Bandwidth Monitoring (MON-1)
+Task,"Install and configure the chosen bandwidth monitoring tool.",,,Implement Bandwidth Monitoring (MON-1)
+Task,"Integrate bandwidth data into `system_health_report.sh` (if feasible and aligns with existing report format).",,,Implement Bandwidth Monitoring (MON-1)
+Task,"Update `send_health_report_v2.sh` (or `alert_manager.sh`) to include bandwidth metrics in daily email reports.",,,Implement Bandwidth Monitoring (MON-1)
+Task,"Define a threshold for unusual bandwidth usage.",,,Implement Bandwidth Monitoring (MON-1)
+Task,"Update `alert_manager.sh` to trigger an alert if bandwidth usage exceeds the defined threshold.",,,Implement Bandwidth Monitoring (MON-1)
+
+Story,"Refine Alerting Thresholds (MON-2)","As a node operator, I want to fine-tune the existing alert thresholds so that I receive timely and relevant notifications for critical system events without excessive false positives.",,MON,
+Task,"Review current `alert_manager/config.yaml` thresholds for CPU, memory, disk usage.",,,Refine Alerting Thresholds (MON-2)
+Task,"Adjust thresholds based on observed home lab performance characteristics.",,,Refine Alerting Thresholds (MON-2)
+Task,"Define new thresholds for services (e.g., Bitcoin Core block processing lag, Electrs indexing lag, Mempool backend update frequency).",,,Refine Alerting Thresholds (MON-2)
+Task,"Implement logic in `alert_manager.sh` (or helper scripts) to check these new service-specific thresholds.",,,Refine Alerting Thresholds (MON-2)
+Task,"Test new thresholds by simulating alerts or observing system under load.",,,Refine Alerting Thresholds (MON-2)
+
+Epic,"Documentation Updates (DOC)","This epic ensures that all project documentation is current and accurately reflects the new home lab environment and the migration process.",DOC,,
+Story,"Update Migration Guide (DOC-1)","As a node operator, I want the migration plan document to reflect the successful migration and any lessons learned so that it serves as an accurate historical record and a guide for future similar operations.",,DOC,
+Task,"Review `docs/migration_plan.md` and update it with actual commands used and any deviations.",,,Update Migration Guide (DOC-1)
+Task,"Add a 'Lessons Learned' section to `docs/migration_plan.md`.",,,Update Migration Guide (DOC-1)
+Task,"Mark the migration plan as 'Completed' or 'Executed'.",,,Update Migration Guide (DOC-1)
+
+Story,"Document Home Lab Setup (DOC-2)","As a node operator, I want a clear and comprehensive document detailing the specific configuration of the home lab server so that I can easily reference it for troubleshooting, maintenance, or future rebuilds.",,DOC,
+Task,"Create a new document (e.g., `docs/home_lab_setup.md`).",,,Document Home Lab Setup (DOC-2)
+Task,"Detail hardware specifications of the home lab server.",,,Document Home Lab Setup (DOC-2)
+Task,"Document Ubuntu OS version and specific customizations.",,,Document Home Lab Setup (DOC-2)
+Task,"List all installed dependencies and their versions.",,,Document Home Lab Setup (DOC-2)
+Task,"Document custom user accounts and their permissions.",,,Document Home Lab Setup (DOC-2)
+Task,"Detail firewall (`ufw`) rules.",,,Document Home Lab Setup (DOC-2)
+Task,"Document network configuration (static IP, router settings, port forwarding if applicable).",,,Document Home Lab Setup (DOC-2)
+Task,"Document physical setup and considerations (power, cooling, physical security).",,,Document Home Lab Setup (DOC-2)
+Task,"Include a diagram of the home lab network if helpful.",,,Document Home Lab Setup (DOC-2)
+Task,"Review and ensure `docs/PROJECT_HISTORY.md` and `docs/roadmap.md` are updated to reflect the completed migration.",,,Document Home Lab Setup (DOC-2)

@@ -16,7 +16,7 @@
     <rect class="bg" width="100%" height="100%" />
 
     <text x="50%" y="40" text-anchor="middle" class="title">Bitcoin Node Health & Monitoring</text>
-    <text x="50%" y="65" text-anchor="middle" font-family="sans-serif" font-size="12px">Last Updated: 2025-12-10 21:30:01 UTC</text>
+    <text x="50%" y="65" text-anchor="middle" font-family="sans-serif" font-size="12px">Last Updated: 2025-12-10 21:50:01 UTC</text>
 
     <!-- Bitcoind Sync Status -->
     <g class="metric" transform="translate(100, 120)">
@@ -25,7 +25,7 @@
         <text x="0" y="70" text-anchor="middle" class="metric-title">Bitcoind Sync</text>
         <g class="tooltip">
             <rect x="-100" y="-80" width="200" height="50" rx="5" class="tooltip-bg" />
-            <text x="0" y="-60" text-anchor="middle" class="tooltip-text">Block Height: 927324</text>
+            <text x="0" y="-60" text-anchor="middle" class="tooltip-text">Block Height: 927325</text>
             <text x="0" y="-40" text-anchor="middle" class="tooltip-text">Peers: 19</text>
         </g>
     </g>
@@ -43,19 +43,19 @@
 
     <!-- Mempool Backend Status -->
     <g class="metric" transform="translate(500, 120)">
-        <circle cx="0" cy="0" r="40" class="status-red" />
-        <text x="0" y="5" text-anchor="middle" fill="white" class="metric-value">offline (Status: )</text>
+        <circle cx="0" cy="0" r="40" class="status-green" />
+        <text x="0" y="5" text-anchor="middle" fill="white" class="metric-value">online</text>
         <text x="0" y="70" text-anchor="middle" class="metric-title">Mempool Backend</text>
         <g class="tooltip">
             <rect x="-100" y="-70" width="200" height="30" rx="5" class="tooltip-bg" />
-            <text x="0" y="-55" text-anchor="middle" class="tooltip-text">Transactions: 2461</text>
+            <text x="0" y="-55" text-anchor="middle" class="tooltip-text">Transactions: 3106</text>
         </g>
     </g>
     
     <!-- Uptime -->
     <g class="metric" transform="translate(700, 120)">
         <circle cx="0" cy="0" r="40" class="status-green" />
-        <text x="0" y="5" text-anchor="middle" fill="white" class="metric-value">4 weeks, 4d 3h 39m</text>
+        <text x="0" y="5" text-anchor="middle" fill="white" class="metric-value">4 weeks, 4d 3h 59m</text>
         <text x="0" y="70" text-anchor="middle" class="metric-title">Uptime (Days)</text>
     </g>
 
@@ -69,14 +69,14 @@
     <!-- Memory Usage -->
     <g class="metric" transform="translate(400, 300)">
         <rect x="-50" y="-20" width="100" height="40" class="status-yellow" />
-        <text x="0" y="5" text-anchor="middle" fill="white" class="metric-value">37%</text>
+        <text x="0" y="5" text-anchor="middle" fill="white" class="metric-value">35%</text>
         <text x="0" y="50" text-anchor="middle" class="metric-title">Memory Usage</text>
     </g>
 
     <!-- CPU Load -->
     <g class="metric" transform="translate(600, 300)">
         <rect x="-50" y="-20" width="100" height="40" class="status-red" />
-        <text x="0" y="5" text-anchor="middle" fill="white" class="metric-value">69.00%</text>
+        <text x="0" y="5" text-anchor="middle" fill="white" class="metric-value">36.00%</text>
         <text x="0" y="50" text-anchor="middle" class="metric-title">CPU Load</text>
     </g>
     

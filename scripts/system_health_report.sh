@@ -88,7 +88,7 @@ MEMPOOL_BACKEND_STATUS="N/A"
 MEMPOOL_SIZE="N/A"
 
 if command -v pm2 &> /dev/null && command -v jq &> /dev/null; then
-    MEMPOOL_PM2_STATUS=$(sudo -u bitcoin_knots_node env PM2_HOME=/home/bitcoin_knots_node/.pm2 pm2 jlist 2>/dev/null | jq -r '.[] | select(.name=="mempool") | .pm2_env.status')
+    MEMPOOL_PM2_STATUS=$(sudo -u bitcoin_knots_node env PM2_HOME=/home/bitcoin_knots_node/.pm2 pm2 jlist 2>/dev/null | grep '^\[' | jq -r '.[] | select(.name=="mempool") | .pm2_env.status')
     if [ "$MEMPOOL_PM2_STATUS" = "online" ]; then
         MEMPOOL_BACKEND_STATUS="online"
     else
