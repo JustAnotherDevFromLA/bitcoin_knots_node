@@ -1,5 +1,5 @@
-"Issue Key","Issue Type","Summary","Description","Epic Link","Parent Link"
-"BKN-1","Epic","Migration - Azure to Home Lab","This epic covers all activities required to move the Bitcoin Node Helper services, data, and configurations from the Azure VM to the local Ubuntu home lab machine.","BKN-1",""
+"Issue Key","Issue Type","Summary","Description","Epic Link","Parent ID"
+"BKN-1","Epic","Migration - Azure to Home Lab","This epic covers all activities required to move the Bitcoin Node Helper services, data, and configurations from the Azure VM to the local Ubuntu home lab machine.","",""
 "BKN-2","Story","Prepare Source Azure Server for Migration","As a node operator, I want to gracefully shut down services and create comprehensive backups on the Azure VM so that data consistency is maintained and all critical components are secured before transfer.","BKN-1",""
 "BKN-3","Task","Stop Nginx service.","`sudo systemctl stop nginx.service`","BKN-1","BKN-2"
 "BKN-4","Task","Stop Mempool.space Backend & Dashboard PM2 processes.","`sudo -u bitcoin_knots_node env PM2_HOME=/home/bitcoin_knots_node/.pm2 pm2 stop all`","BKN-1","BKN-2"
@@ -96,7 +96,7 @@
 "BKN-76","Task","Update DNS A record to point to the new home lab IP (if applicable).","","BKN-1","BKN-63"
 "BKN-77","Task","Decommission Azure VM.","","BKN-1","BKN-63"
 
-"BKN-78","Epic","Monitoring Enhancements (MON)","This epic focuses on enhancing the existing monitoring system, specifically by implementing bandwidth monitoring and refining alerting thresholds.","BKN-78",""
+"BKN-78","Epic","Monitoring Enhancements (MON)","This epic focuses on enhancing the existing monitoring system, specifically by implementing bandwidth monitoring and refining alerting thresholds.","",""
 "BKN-79","Story","Implement Bandwidth Monitoring (MON-1)","As a node operator, I want to track network bandwidth usage so that I can monitor node performance and identify potential network bottlenecks or unusual activity.","BKN-78",""
 "BKN-80","Task","Research and select a suitable bandwidth monitoring tool (e.g., `vnstat`, `iftop`, Prometheus/Grafana setup).","","BKN-78","BKN-79"
 "BKN-81","Task","Install and configure the chosen bandwidth monitoring tool.","","BKN-78","BKN-79"
@@ -112,7 +112,7 @@
 "BKN-90","Task","Implement logic in `alert_manager.sh` (or helper scripts) to check these new service-specific thresholds.","","BKN-78","BKN-86"
 "BKN-91","Task","Test new thresholds by simulating alerts or observing system under load.","","BKN-78","BKN-86"
 
-"BKN-92","Epic","Documentation Updates (DOC)","This epic ensures that all project documentation is current and accurately reflects the new home lab environment and the migration process.","BKN-92",""
+"BKN-92","Epic","Documentation Updates (DOC)","This epic ensures that all project documentation is current and accurately reflects the new home lab environment and the migration process.","",""
 "BKN-93","Story","Update Migration Guide (DOC-1)","As a node operator, I want the migration plan document to reflect the successful migration and any lessons learned so that it serves as an accurate historical record and a guide for future similar operations.","BKN-92",""
 "BKN-94","Task","Review `docs/migration_plan.md` and update it with actual commands used and any deviations.","","BKN-92","BKN-93"
 "BKN-95","Task","Add a 'Lessons Learned' section to `docs/migration_plan.md`.","","BKN-92","BKN-93"

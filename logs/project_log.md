@@ -801,3 +801,13 @@ t threshold refinement, and documentation updates.
 ### **CSV Sprint Plan Generated:** A CSV file (`docs/sprint_plan.csv`) has been generated from the M
 arkdown sprint plan (`docs/sprint_plan_migration_and_monitoring.md`), formatted for direct import i
 nto Jira. The CSV includes Epics, Stories, and Tasks with appropriate Jira field mappings.
+### **Jira CSV with BKN IDs Generated:** The CSV file (`docs/sprint_plan_jira_import.csv`) has been
+ regenerated with Jira-specific column headers (`Issue Key`, `Parent ID`) and issue keys formatted 
+as "BKN-sequential ID" (e.g., BKN-1, BKN-2, etc.) to address import errors.
+### **Git Push after Jira CSV update:** All relevant changes, including the updated Jira CSV file an
+d the finalization of the `cheatsheet.md` move, have been committed and pushed to the remote Git rep
+ository.
+### **Jira CSV with Hierarchical Fixes Generated:** The CSV file (`docs/sprint_plan_jira_import.csv`
+) has been regenerated with `Epic Link` cleared for Epic issues, along with "BKN-sequential ID" issu
+e key format and corrected column headers (`Issue Key`, `Parent ID`), to address hierarchical mappi
+ng errors during Jira import.
